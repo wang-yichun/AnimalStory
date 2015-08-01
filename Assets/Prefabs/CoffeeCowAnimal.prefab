@@ -8,6 +8,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 443800}
+  - 114: {fileID: 11417450}
   m_Layer: 0
   m_Name: CoffeeCowAnimal
   m_TagString: Untagged
@@ -56,6 +57,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 443800}
   m_RootOrder: 0
+--- !u!114 &11417450
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 109780}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70c27d10e364442d39706febdae7786c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _viewModelId: 
+  _InjectView: 0
+  _BindOnStart: 1
+  _DisposeOnDestroy: 0
+  _overrideViewModel: 0
 --- !u!212 &21221526
 SpriteRenderer:
   m_ObjectHideFlags: 1

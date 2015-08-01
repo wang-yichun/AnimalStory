@@ -8,6 +8,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 480042}
+  - 114: {fileID: 11443960}
   m_Layer: 0
   m_Name: BlueBirdAnimal
   m_TagString: Untagged
@@ -56,6 +57,22 @@ Transform:
   - {fileID: 466374}
   m_Father: {fileID: 0}
   m_RootOrder: 0
+--- !u!114 &11443960
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 132268}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e692575fd0cb4dda929d8c6063f42eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _viewModelId: 
+  _InjectView: 0
+  _BindOnStart: 1
+  _DisposeOnDestroy: 0
+  _overrideViewModel: 0
 --- !u!212 &21211690
 SpriteRenderer:
   m_ObjectHideFlags: 1
