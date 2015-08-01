@@ -23,20 +23,43 @@ using UniRx;
 
 public partial class AnimalViewModelBase : uFrame.MVVM.ViewModel {
     
+    private P<AnimalType> _AnimalTypeProperty;
+    
     public AnimalViewModelBase(uFrame.Kernel.IEventAggregator aggregator) : 
             base(aggregator) {
     }
     
+    public virtual P<AnimalType> AnimalTypeProperty {
+        get {
+            return _AnimalTypeProperty;
+        }
+        set {
+            _AnimalTypeProperty = value;
+        }
+    }
+    
+    public virtual AnimalType AnimalType {
+        get {
+            return AnimalTypeProperty.Value;
+        }
+        set {
+            AnimalTypeProperty.Value = value;
+        }
+    }
+    
     public override void Bind() {
         base.Bind();
+        _AnimalTypeProperty = new P<AnimalType>(this, "AnimalType");
     }
     
     public override void Read(ISerializerStream stream) {
         base.Read(stream);
+        this.AnimalType = (AnimalType)stream.DeserializeInt("AnimalType");;
     }
     
     public override void Write(ISerializerStream stream) {
         base.Write(stream);
+        stream.SerializeInt("AnimalType", (int)this.AnimalType);;
     }
     
     protected override void FillCommands(System.Collections.Generic.List<uFrame.MVVM.ViewModelCommandInfo> list) {
@@ -45,6 +68,8 @@ public partial class AnimalViewModelBase : uFrame.MVVM.ViewModel {
     
     protected override void FillProperties(System.Collections.Generic.List<uFrame.MVVM.ViewModelPropertyInfo> list) {
         base.FillProperties(list);
+        // PropertiesChildItem
+        list.Add(new ViewModelPropertyInfo(_AnimalTypeProperty, false, false, true, false));
     }
 }
 
@@ -57,12 +82,24 @@ public partial class AnimalViewModel {
 
 public partial class InGameRootViewModelBase : uFrame.MVVM.ViewModel {
     
+    private Signal<CreateAnimalCommand> _CreateAnimal;
+    
     public InGameRootViewModelBase(uFrame.Kernel.IEventAggregator aggregator) : 
             base(aggregator) {
     }
     
+    public virtual Signal<CreateAnimalCommand> CreateAnimal {
+        get {
+            return _CreateAnimal;
+        }
+        set {
+            _CreateAnimal = value;
+        }
+    }
+    
     public override void Bind() {
         base.Bind();
+        this.CreateAnimal = new Signal<CreateAnimalCommand>(this);
     }
     
     public override void Read(ISerializerStream stream) {
@@ -75,6 +112,7 @@ public partial class InGameRootViewModelBase : uFrame.MVVM.ViewModel {
     
     protected override void FillCommands(System.Collections.Generic.List<uFrame.MVVM.ViewModelCommandInfo> list) {
         base.FillCommands(list);
+        list.Add(new ViewModelCommandInfo("CreateAnimal", CreateAnimal) { ParameterType = typeof(void) });
     }
     
     protected override void FillProperties(System.Collections.Generic.List<uFrame.MVVM.ViewModelPropertyInfo> list) {
