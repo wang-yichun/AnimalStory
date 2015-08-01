@@ -19,20 +19,26 @@ using uFrame.MVVM;
 
 public class InGameSysLoaderBase : uFrame.Kernel.SystemLoader {
     
-    private CharacterController _CharacterController;
+    private AnimalController _AnimalController;
     
     private InGameRootController _InGameRootController;
     
+    private BlueBirdAnimalController _BlueBirdAnimalController;
+    
+    private CoffeeCowAnimalController _CoffeeCowAnimalController;
+    
+    private GreenFrogAnimalController _GreenFrogAnimalController;
+    
     [uFrame.IOC.InjectAttribute()]
-    public virtual CharacterController CharacterController {
+    public virtual AnimalController AnimalController {
         get {
-            if (_CharacterController==null) {
-                _CharacterController = Container.CreateInstance(typeof(CharacterController)) as CharacterController;;
+            if (_AnimalController==null) {
+                _AnimalController = Container.CreateInstance(typeof(AnimalController)) as AnimalController;;
             }
-            return _CharacterController;
+            return _AnimalController;
         }
         set {
-            _CharacterController = value;
+            _AnimalController = value;
         }
     }
     
@@ -49,10 +55,55 @@ public class InGameSysLoaderBase : uFrame.Kernel.SystemLoader {
         }
     }
     
+    [uFrame.IOC.InjectAttribute()]
+    public virtual BlueBirdAnimalController BlueBirdAnimalController {
+        get {
+            if (_BlueBirdAnimalController==null) {
+                _BlueBirdAnimalController = Container.CreateInstance(typeof(BlueBirdAnimalController)) as BlueBirdAnimalController;;
+            }
+            return _BlueBirdAnimalController;
+        }
+        set {
+            _BlueBirdAnimalController = value;
+        }
+    }
+    
+    [uFrame.IOC.InjectAttribute()]
+    public virtual CoffeeCowAnimalController CoffeeCowAnimalController {
+        get {
+            if (_CoffeeCowAnimalController==null) {
+                _CoffeeCowAnimalController = Container.CreateInstance(typeof(CoffeeCowAnimalController)) as CoffeeCowAnimalController;;
+            }
+            return _CoffeeCowAnimalController;
+        }
+        set {
+            _CoffeeCowAnimalController = value;
+        }
+    }
+    
+    [uFrame.IOC.InjectAttribute()]
+    public virtual GreenFrogAnimalController GreenFrogAnimalController {
+        get {
+            if (_GreenFrogAnimalController==null) {
+                _GreenFrogAnimalController = Container.CreateInstance(typeof(GreenFrogAnimalController)) as GreenFrogAnimalController;;
+            }
+            return _GreenFrogAnimalController;
+        }
+        set {
+            _GreenFrogAnimalController = value;
+        }
+    }
+    
     public override void Load() {
-        Container.RegisterViewModelManager<CharacterViewModel>(new ViewModelManager<CharacterViewModel>());
-        Container.RegisterController<CharacterController>(CharacterController);
+        Container.RegisterViewModelManager<AnimalViewModel>(new ViewModelManager<AnimalViewModel>());
+        Container.RegisterController<AnimalController>(AnimalController);
         Container.RegisterViewModelManager<InGameRootViewModel>(new ViewModelManager<InGameRootViewModel>());
         Container.RegisterController<InGameRootController>(InGameRootController);
+        Container.RegisterViewModelManager<BlueBirdAnimalViewModel>(new ViewModelManager<BlueBirdAnimalViewModel>());
+        Container.RegisterController<BlueBirdAnimalController>(BlueBirdAnimalController);
+        Container.RegisterViewModelManager<CoffeeCowAnimalViewModel>(new ViewModelManager<CoffeeCowAnimalViewModel>());
+        Container.RegisterController<CoffeeCowAnimalController>(CoffeeCowAnimalController);
+        Container.RegisterViewModelManager<GreenFrogAnimalViewModel>(new ViewModelManager<GreenFrogAnimalViewModel>());
+        Container.RegisterController<GreenFrogAnimalController>(GreenFrogAnimalController);
     }
 }

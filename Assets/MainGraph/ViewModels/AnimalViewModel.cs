@@ -11,5 +11,5 @@ using UnityEngine;
 using UniRx;
 
 
-public partial class CharacterViewModel : CharacterViewModelBase {
+public partial class AnimalViewModel : AnimalViewModelBase {
 }

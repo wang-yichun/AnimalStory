@@ -19,23 +19,23 @@ using uFrame.Kernel;
 using uFrame.IOC;
 
 
-public class CharacterControllerBase : uFrame.MVVM.Controller {
+public class AnimalControllerBase : uFrame.MVVM.Controller {
     
-    private uFrame.MVVM.IViewModelManager _CharacterViewModelManager;
+    private uFrame.MVVM.IViewModelManager _AnimalViewModelManager;
     
-    [uFrame.IOC.InjectAttribute("Character")]
-    public uFrame.MVVM.IViewModelManager CharacterViewModelManager {
+    [uFrame.IOC.InjectAttribute("Animal")]
+    public uFrame.MVVM.IViewModelManager AnimalViewModelManager {
         get {
-            return _CharacterViewModelManager;
+            return _AnimalViewModelManager;
         }
         set {
-            _CharacterViewModelManager = value;
+            _AnimalViewModelManager = value;
         }
     }
     
-    public IEnumerable<CharacterViewModel> CharacterViewModels {
+    public IEnumerable<AnimalViewModel> AnimalViewModels {
         get {
-            return CharacterViewModelManager.OfType<CharacterViewModel>();
+            return AnimalViewModelManager.OfType<AnimalViewModel>();
         }
     }
     
@@ -47,25 +47,25 @@ public class CharacterControllerBase : uFrame.MVVM.Controller {
     public override void Initialize(uFrame.MVVM.ViewModel viewModel) {
         base.Initialize(viewModel);
         // This is called when a viewmodel is created
-        this.InitializeCharacter(((CharacterViewModel)(viewModel)));
+        this.InitializeAnimal(((AnimalViewModel)(viewModel)));
     }
     
-    public virtual CharacterViewModel CreateCharacter() {
-        return ((CharacterViewModel)(this.Create(Guid.NewGuid().ToString())));
+    public virtual AnimalViewModel CreateAnimal() {
+        return ((AnimalViewModel)(this.Create(Guid.NewGuid().ToString())));
     }
     
     public override uFrame.MVVM.ViewModel CreateEmpty() {
-        return new CharacterViewModel(this.EventAggregator);
+        return new AnimalViewModel(this.EventAggregator);
     }
     
-    public virtual void InitializeCharacter(CharacterViewModel viewModel) {
-        // This is called when a CharacterViewModel is created
-        CharacterViewModelManager.Add(viewModel);
+    public virtual void InitializeAnimal(AnimalViewModel viewModel) {
+        // This is called when a AnimalViewModel is created
+        AnimalViewModelManager.Add(viewModel);
     }
     
     public override void DisposingViewModel(uFrame.MVVM.ViewModel viewModel) {
         base.DisposingViewModel(viewModel);
-        CharacterViewModelManager.Remove(viewModel);
+        AnimalViewModelManager.Remove(viewModel);
     }
 }
 
@@ -116,5 +116,155 @@ public class InGameRootControllerBase : uFrame.MVVM.Controller {
     public override void DisposingViewModel(uFrame.MVVM.ViewModel viewModel) {
         base.DisposingViewModel(viewModel);
         InGameRootViewModelManager.Remove(viewModel);
+    }
+}
+
+public class BlueBirdAnimalControllerBase : AnimalController {
+    
+    private uFrame.MVVM.IViewModelManager _BlueBirdAnimalViewModelManager;
+    
+    [uFrame.IOC.InjectAttribute("BlueBirdAnimal")]
+    public uFrame.MVVM.IViewModelManager BlueBirdAnimalViewModelManager {
+        get {
+            return _BlueBirdAnimalViewModelManager;
+        }
+        set {
+            _BlueBirdAnimalViewModelManager = value;
+        }
+    }
+    
+    public IEnumerable<BlueBirdAnimalViewModel> BlueBirdAnimalViewModels {
+        get {
+            return BlueBirdAnimalViewModelManager.OfType<BlueBirdAnimalViewModel>();
+        }
+    }
+    
+    public override void Setup() {
+        base.Setup();
+        // This is called when the controller is created
+    }
+    
+    public override void Initialize(uFrame.MVVM.ViewModel viewModel) {
+        base.Initialize(viewModel);
+        // This is called when a viewmodel is created
+        this.InitializeBlueBirdAnimal(((BlueBirdAnimalViewModel)(viewModel)));
+    }
+    
+    public virtual BlueBirdAnimalViewModel CreateBlueBirdAnimal() {
+        return ((BlueBirdAnimalViewModel)(this.Create(Guid.NewGuid().ToString())));
+    }
+    
+    public override uFrame.MVVM.ViewModel CreateEmpty() {
+        return new BlueBirdAnimalViewModel(this.EventAggregator);
+    }
+    
+    public virtual void InitializeBlueBirdAnimal(BlueBirdAnimalViewModel viewModel) {
+        // This is called when a BlueBirdAnimalViewModel is created
+        BlueBirdAnimalViewModelManager.Add(viewModel);
+    }
+    
+    public override void DisposingViewModel(uFrame.MVVM.ViewModel viewModel) {
+        base.DisposingViewModel(viewModel);
+        BlueBirdAnimalViewModelManager.Remove(viewModel);
+    }
+}
+
+public class CoffeeCowAnimalControllerBase : AnimalController {
+    
+    private uFrame.MVVM.IViewModelManager _CoffeeCowAnimalViewModelManager;
+    
+    [uFrame.IOC.InjectAttribute("CoffeeCowAnimal")]
+    public uFrame.MVVM.IViewModelManager CoffeeCowAnimalViewModelManager {
+        get {
+            return _CoffeeCowAnimalViewModelManager;
+        }
+        set {
+            _CoffeeCowAnimalViewModelManager = value;
+        }
+    }
+    
+    public IEnumerable<CoffeeCowAnimalViewModel> CoffeeCowAnimalViewModels {
+        get {
+            return CoffeeCowAnimalViewModelManager.OfType<CoffeeCowAnimalViewModel>();
+        }
+    }
+    
+    public override void Setup() {
+        base.Setup();
+        // This is called when the controller is created
+    }
+    
+    public override void Initialize(uFrame.MVVM.ViewModel viewModel) {
+        base.Initialize(viewModel);
+        // This is called when a viewmodel is created
+        this.InitializeCoffeeCowAnimal(((CoffeeCowAnimalViewModel)(viewModel)));
+    }
+    
+    public virtual CoffeeCowAnimalViewModel CreateCoffeeCowAnimal() {
+        return ((CoffeeCowAnimalViewModel)(this.Create(Guid.NewGuid().ToString())));
+    }
+    
+    public override uFrame.MVVM.ViewModel CreateEmpty() {
+        return new CoffeeCowAnimalViewModel(this.EventAggregator);
+    }
+    
+    public virtual void InitializeCoffeeCowAnimal(CoffeeCowAnimalViewModel viewModel) {
+        // This is called when a CoffeeCowAnimalViewModel is created
+        CoffeeCowAnimalViewModelManager.Add(viewModel);
+    }
+    
+    public override void DisposingViewModel(uFrame.MVVM.ViewModel viewModel) {
+        base.DisposingViewModel(viewModel);
+        CoffeeCowAnimalViewModelManager.Remove(viewModel);
+    }
+}
+
+public class GreenFrogAnimalControllerBase : AnimalController {
+    
+    private uFrame.MVVM.IViewModelManager _GreenFrogAnimalViewModelManager;
+    
+    [uFrame.IOC.InjectAttribute("GreenFrogAnimal")]
+    public uFrame.MVVM.IViewModelManager GreenFrogAnimalViewModelManager {
+        get {
+            return _GreenFrogAnimalViewModelManager;
+        }
+        set {
+            _GreenFrogAnimalViewModelManager = value;
+        }
+    }
+    
+    public IEnumerable<GreenFrogAnimalViewModel> GreenFrogAnimalViewModels {
+        get {
+            return GreenFrogAnimalViewModelManager.OfType<GreenFrogAnimalViewModel>();
+        }
+    }
+    
+    public override void Setup() {
+        base.Setup();
+        // This is called when the controller is created
+    }
+    
+    public override void Initialize(uFrame.MVVM.ViewModel viewModel) {
+        base.Initialize(viewModel);
+        // This is called when a viewmodel is created
+        this.InitializeGreenFrogAnimal(((GreenFrogAnimalViewModel)(viewModel)));
+    }
+    
+    public virtual GreenFrogAnimalViewModel CreateGreenFrogAnimal() {
+        return ((GreenFrogAnimalViewModel)(this.Create(Guid.NewGuid().ToString())));
+    }
+    
+    public override uFrame.MVVM.ViewModel CreateEmpty() {
+        return new GreenFrogAnimalViewModel(this.EventAggregator);
+    }
+    
+    public virtual void InitializeGreenFrogAnimal(GreenFrogAnimalViewModel viewModel) {
+        // This is called when a GreenFrogAnimalViewModel is created
+        GreenFrogAnimalViewModelManager.Add(viewModel);
+    }
+    
+    public override void DisposingViewModel(uFrame.MVVM.ViewModel viewModel) {
+        base.DisposingViewModel(viewModel);
+        GreenFrogAnimalViewModelManager.Remove(viewModel);
     }
 }

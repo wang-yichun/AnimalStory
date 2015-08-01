@@ -21,9 +21,9 @@ using UnityEngine;
 using UniRx;
 
 
-public partial class CharacterViewModelBase : uFrame.MVVM.ViewModel {
+public partial class AnimalViewModelBase : uFrame.MVVM.ViewModel {
     
-    public CharacterViewModelBase(uFrame.Kernel.IEventAggregator aggregator) : 
+    public AnimalViewModelBase(uFrame.Kernel.IEventAggregator aggregator) : 
             base(aggregator) {
     }
     
@@ -48,9 +48,9 @@ public partial class CharacterViewModelBase : uFrame.MVVM.ViewModel {
     }
 }
 
-public partial class CharacterViewModel {
+public partial class AnimalViewModel {
     
-    public CharacterViewModel(uFrame.Kernel.IEventAggregator aggregator) : 
+    public AnimalViewModel(uFrame.Kernel.IEventAggregator aggregator) : 
             base(aggregator) {
     }
 }
@@ -85,6 +85,108 @@ public partial class InGameRootViewModelBase : uFrame.MVVM.ViewModel {
 public partial class InGameRootViewModel {
     
     public InGameRootViewModel(uFrame.Kernel.IEventAggregator aggregator) : 
+            base(aggregator) {
+    }
+}
+
+public partial class BlueBirdAnimalViewModelBase : AnimalViewModel {
+    
+    public BlueBirdAnimalViewModelBase(uFrame.Kernel.IEventAggregator aggregator) : 
+            base(aggregator) {
+    }
+    
+    public override void Bind() {
+        base.Bind();
+    }
+    
+    public override void Read(ISerializerStream stream) {
+        base.Read(stream);
+    }
+    
+    public override void Write(ISerializerStream stream) {
+        base.Write(stream);
+    }
+    
+    protected override void FillCommands(System.Collections.Generic.List<uFrame.MVVM.ViewModelCommandInfo> list) {
+        base.FillCommands(list);
+    }
+    
+    protected override void FillProperties(System.Collections.Generic.List<uFrame.MVVM.ViewModelPropertyInfo> list) {
+        base.FillProperties(list);
+    }
+}
+
+public partial class BlueBirdAnimalViewModel {
+    
+    public BlueBirdAnimalViewModel(uFrame.Kernel.IEventAggregator aggregator) : 
+            base(aggregator) {
+    }
+}
+
+public partial class CoffeeCowAnimalViewModelBase : AnimalViewModel {
+    
+    public CoffeeCowAnimalViewModelBase(uFrame.Kernel.IEventAggregator aggregator) : 
+            base(aggregator) {
+    }
+    
+    public override void Bind() {
+        base.Bind();
+    }
+    
+    public override void Read(ISerializerStream stream) {
+        base.Read(stream);
+    }
+    
+    public override void Write(ISerializerStream stream) {
+        base.Write(stream);
+    }
+    
+    protected override void FillCommands(System.Collections.Generic.List<uFrame.MVVM.ViewModelCommandInfo> list) {
+        base.FillCommands(list);
+    }
+    
+    protected override void FillProperties(System.Collections.Generic.List<uFrame.MVVM.ViewModelPropertyInfo> list) {
+        base.FillProperties(list);
+    }
+}
+
+public partial class CoffeeCowAnimalViewModel {
+    
+    public CoffeeCowAnimalViewModel(uFrame.Kernel.IEventAggregator aggregator) : 
+            base(aggregator) {
+    }
+}
+
+public partial class GreenFrogAnimalViewModelBase : AnimalViewModel {
+    
+    public GreenFrogAnimalViewModelBase(uFrame.Kernel.IEventAggregator aggregator) : 
+            base(aggregator) {
+    }
+    
+    public override void Bind() {
+        base.Bind();
+    }
+    
+    public override void Read(ISerializerStream stream) {
+        base.Read(stream);
+    }
+    
+    public override void Write(ISerializerStream stream) {
+        base.Write(stream);
+    }
+    
+    protected override void FillCommands(System.Collections.Generic.List<uFrame.MVVM.ViewModelCommandInfo> list) {
+        base.FillCommands(list);
+    }
+    
+    protected override void FillProperties(System.Collections.Generic.List<uFrame.MVVM.ViewModelPropertyInfo> list) {
+        base.FillProperties(list);
+    }
+}
+
+public partial class GreenFrogAnimalViewModel {
+    
+    public GreenFrogAnimalViewModel(uFrame.Kernel.IEventAggregator aggregator) : 
             base(aggregator) {
     }
 }
