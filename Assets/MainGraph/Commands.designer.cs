@@ -17,5 +17,5 @@ using uFrame.MVVM;
 using uFrame.Serialization;
 
 
-public partial class CreateAnimalCommand : uFrame.MVVM.ViewModelCommand {
+public partial class AddAnimalCommand : uFrame.MVVM.ViewModelCommand {
 }

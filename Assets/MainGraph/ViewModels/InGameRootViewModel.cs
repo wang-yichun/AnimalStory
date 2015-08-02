@@ -12,4 +12,8 @@ using UniRx;
 
 
 public partial class InGameRootViewModel : InGameRootViewModelBase {
+	public override void Bind ()
+	{
+		base.Bind ();
+	}
 }

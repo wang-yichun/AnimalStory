@@ -125,3 +125,92 @@ public class GreenFrogAnimalViewBase : uFrame.MVVM.ViewBase {
         // Any designer bindings are created in the base implementation.
     }
 }
+
+public class InGameRootViewBase : uFrame.MVVM.ViewBase {
+    
+    [UFToggleGroup("InGameState")]
+    [UnityEngine.HideInInspector()]
+    public bool _BindInGameState = true;
+    
+    [UFGroup("InGameState")]
+    [UnityEngine.SerializeField()]
+    [UnityEngine.HideInInspector()]
+    [UnityEngine.Serialization.FormerlySerializedAsAttribute("_InGameStateonlyWhenChanged")]
+    protected bool _InGameStateOnlyWhenChanged;
+    
+    [UFToggleGroup("AddAnimal")]
+    [UnityEngine.HideInInspector()]
+    public bool _BindAddAnimal = true;
+    
+    public override string DefaultIdentifier {
+        get {
+            return base.DefaultIdentifier;
+        }
+    }
+    
+    public override System.Type ViewModelType {
+        get {
+            return typeof(InGameRootViewModel);
+        }
+    }
+    
+    public InGameRootViewModel InGameRoot {
+        get {
+            return (InGameRootViewModel)ViewModelObject;
+        }
+    }
+    
+    protected override void InitializeViewModel(uFrame.MVVM.ViewModel model) {
+        base.InitializeViewModel(model);
+        // NOTE: this method is only invoked if the 'Initialize ViewModel' is checked in the inspector.
+        // var vm = model as InGameRootViewModel;
+        // This method is invoked when applying the data from the inspector to the viewmodel.  Add any view-specific customizations here.
+        var ingamerootview = ((InGameRootViewModel)model);
+    }
+    
+    public override void Bind() {
+        base.Bind();
+        // Use this.InGameRoot to access the viewmodel.
+        // Use this method to subscribe to the view-model.
+        // Any designer bindings are created in the base implementation.
+        if (_BindInGameState) {
+            this.BindStateProperty(this.InGameRoot.InGameStateProperty, this.InGameStateChanged, _InGameStateOnlyWhenChanged);
+        }
+        if (_BindAddAnimal) {
+            this.BindCommandExecuted(this.InGameRoot.AddAnimal, this.AddAnimalExecuted);
+        }
+    }
+    
+    public virtual void InGameStateChanged(Invert.StateMachine.State arg1) {
+        if (arg1 is Ready) {
+            this.OnReady();
+        }
+        if (arg1 is Ongoing) {
+            this.OnOngoing();
+        }
+        if (arg1 is Stop) {
+            this.OnStop();
+        }
+    }
+    
+    public virtual void OnReady() {
+    }
+    
+    public virtual void OnOngoing() {
+    }
+    
+    public virtual void OnStop() {
+    }
+    
+    public virtual void AddAnimalExecuted(AddAnimalCommand command) {
+    }
+    
+    public virtual void ExecuteAddAnimal() {
+        InGameRoot.AddAnimal.OnNext(new AddAnimalCommand() { Sender = InGameRoot });
+    }
+    
+    public virtual void ExecuteAddAnimal(AddAnimalCommand command) {
+        command.Sender = InGameRoot;
+        InGameRoot.AddAnimal.OnNext(command);
+    }
+}

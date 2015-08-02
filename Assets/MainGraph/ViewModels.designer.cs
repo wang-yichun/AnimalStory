@@ -82,41 +82,66 @@ public partial class AnimalViewModel {
 
 public partial class InGameRootViewModelBase : uFrame.MVVM.ViewModel {
     
-    private Signal<CreateAnimalCommand> _CreateAnimal;
+    private InGameStateMachine _InGameStateProperty;
+    
+    private Signal<AddAnimalCommand> _AddAnimal;
     
     public InGameRootViewModelBase(uFrame.Kernel.IEventAggregator aggregator) : 
             base(aggregator) {
     }
     
-    public virtual Signal<CreateAnimalCommand> CreateAnimal {
+    public virtual InGameStateMachine InGameStateProperty {
         get {
-            return _CreateAnimal;
+            return _InGameStateProperty;
         }
         set {
-            _CreateAnimal = value;
+            _InGameStateProperty = value;
+        }
+    }
+    
+    public virtual Invert.StateMachine.State InGameState {
+        get {
+            return InGameStateProperty.Value;
+        }
+        set {
+            InGameStateProperty.Value = value;
+        }
+    }
+    
+    public virtual Signal<AddAnimalCommand> AddAnimal {
+        get {
+            return _AddAnimal;
+        }
+        set {
+            _AddAnimal = value;
         }
     }
     
     public override void Bind() {
         base.Bind();
-        this.CreateAnimal = new Signal<CreateAnimalCommand>(this);
+        this.AddAnimal = new Signal<AddAnimalCommand>(this);
+        _InGameStateProperty = new InGameStateMachine(this, "InGameState");
     }
     
     public override void Read(ISerializerStream stream) {
         base.Read(stream);
+        this._InGameStateProperty.SetState(stream.DeserializeString("InGameState"));
     }
     
     public override void Write(ISerializerStream stream) {
         base.Write(stream);
+        stream.SerializeString("InGameState", this.InGameState.Name);;
     }
     
     protected override void FillCommands(System.Collections.Generic.List<uFrame.MVVM.ViewModelCommandInfo> list) {
         base.FillCommands(list);
-        list.Add(new ViewModelCommandInfo("CreateAnimal", CreateAnimal) { ParameterType = typeof(void) });
+        list.Add(new ViewModelCommandInfo("AddAnimal", AddAnimal) { ParameterType = typeof(void) });
     }
     
     protected override void FillProperties(System.Collections.Generic.List<uFrame.MVVM.ViewModelPropertyInfo> list) {
         base.FillProperties(list);
+        // PropertiesChildItem
+        list.Add(new ViewModelPropertyInfo(_InGameStateProperty, false, false, false, false));
     }
 }
 

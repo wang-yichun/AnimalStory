@@ -17,8 +17,10 @@ public class InGameRootController : InGameRootControllerBase {
         // This is called when a InGameRootViewModel is created
     }
 
-    public override void CreateAnimal(InGameRootViewModel viewModel) {
-        base.CreateAnimal(viewModel);
-		Debug.Log ("CreateAnimal func Called!");
-    }
+	public override void AddAnimal (InGameRootViewModel viewModel)
+	{
+		base.AddAnimal (viewModel);
+		Debug.Log ("AddAnimal func Called!");
+	}
 }
+ 
