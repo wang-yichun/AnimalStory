@@ -224,7 +224,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 750981504}
   m_Layer: 0
-  m_Name: Animals_Container
+  m_Name: MapContainerObj
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -286,3 +286,8 @@ MonoBehaviour:
   _BindOnStart: 1
   _DisposeOnDestroy: 0
   _overrideViewModel: 1
+  _BindInGameState: 1
+  _InGameStateOnlyWhenChanged: 0
+  _BindAddAnimal: 1
+  MapContainerObj: {fileID: 750981503}
+  BlueBirdAnimalPrefab: {fileID: 132268, guid: b4c20541234d94651858d4095235ef4a, type: 2}
