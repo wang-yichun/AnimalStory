@@ -15,6 +15,8 @@ public class InGameRootView : InGameRootViewBase
     
 	public GameObject MapContainerObj;
 	public GameObject BlueBirdAnimalPrefab;
+	public GameObject CoffeeCowAnimalPrefab;
+	public GameObject GreenFrogAnimalPrefab;
 
 	protected override void InitializeViewModel (uFrame.MVVM.ViewModel model)
 	{
@@ -35,7 +37,11 @@ public class InGameRootView : InGameRootViewBase
 	public override void OnReady ()
 	{
 		base.OnReady ();
-		this.ExecuteAddAnimal ();
+
+		GameObject bb = Instantiate (BlueBirdAnimalPrefab) as GameObject;
+		bb.transform.parent = this.MapContainerObj.transform;
+		var bbvm = bb.GetViewModel<BlueBirdAnimalViewModel> ();
+		this.InGameRoot.AnimalCollections.Add (bbvm);
 	}
 
 	public override void AddAnimalExecuted (AddAnimalCommand command)

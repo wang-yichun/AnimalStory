@@ -84,6 +84,8 @@ public partial class InGameRootViewModelBase : uFrame.MVVM.ViewModel {
     
     private InGameStateMachine _InGameStateProperty;
     
+    private ModelCollection<AnimalViewModel> _AnimalCollections;
+    
     private Signal<AddAnimalCommand> _AddAnimal;
     
     public InGameRootViewModelBase(uFrame.Kernel.IEventAggregator aggregator) : 
@@ -108,6 +110,15 @@ public partial class InGameRootViewModelBase : uFrame.MVVM.ViewModel {
         }
     }
     
+    public virtual ModelCollection<AnimalViewModel> AnimalCollections {
+        get {
+            return _AnimalCollections;
+        }
+        set {
+            _AnimalCollections = value;
+        }
+    }
+    
     public virtual Signal<AddAnimalCommand> AddAnimal {
         get {
             return _AddAnimal;
@@ -120,17 +131,23 @@ public partial class InGameRootViewModelBase : uFrame.MVVM.ViewModel {
     public override void Bind() {
         base.Bind();
         this.AddAnimal = new Signal<AddAnimalCommand>(this);
+        _AnimalCollections = new ModelCollection<AnimalViewModel>(this, "AnimalCollections");
         _InGameStateProperty = new InGameStateMachine(this, "InGameState");
     }
     
     public override void Read(ISerializerStream stream) {
         base.Read(stream);
         this._InGameStateProperty.SetState(stream.DeserializeString("InGameState"));
+        if (stream.DeepSerialize) {
+            this.AnimalCollections.Clear();
+            this.AnimalCollections.AddRange(stream.DeserializeObjectArray<AnimalViewModel>("AnimalCollections"));
+        }
     }
     
     public override void Write(ISerializerStream stream) {
         base.Write(stream);
         stream.SerializeString("InGameState", this.InGameState.Name);;
+        if (stream.DeepSerialize) stream.SerializeArray("AnimalCollections", this.AnimalCollections);
     }
     
     protected override void FillCommands(System.Collections.Generic.List<uFrame.MVVM.ViewModelCommandInfo> list) {
@@ -142,6 +159,7 @@ public partial class InGameRootViewModelBase : uFrame.MVVM.ViewModel {
         base.FillProperties(list);
         // PropertiesChildItem
         list.Add(new ViewModelPropertyInfo(_InGameStateProperty, false, false, false, false));
+        list.Add(new ViewModelPropertyInfo(_AnimalCollections, true, true, false, false));
     }
 }
 
