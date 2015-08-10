@@ -9,6 +9,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 480042}
   - 114: {fileID: 11443960}
+  - 61: {fileID: 6117404}
   m_Layer: 0
   m_Name: BlueBirdAnimal
   m_TagString: Untagged
@@ -57,6 +58,19 @@ Transform:
   - {fileID: 466374}
   m_Father: {fileID: 0}
   m_RootOrder: 0
+--- !u!61 &6117404
+BoxCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 132268}
+  m_Enabled: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Size: {x: 1.79999995, y: 1.79999995}
 --- !u!114 &11443960
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -73,6 +87,7 @@ MonoBehaviour:
   _BindOnStart: 1
   _DisposeOnDestroy: 0
   _overrideViewModel: 0
+  _AnimalType: 0
 --- !u!212 &21211690
 SpriteRenderer:
   m_ObjectHideFlags: 1
