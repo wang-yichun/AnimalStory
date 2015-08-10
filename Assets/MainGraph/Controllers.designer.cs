@@ -110,20 +110,12 @@ public class InGameRootControllerBase : uFrame.MVVM.Controller {
     
     public virtual void InitializeInGameRoot(InGameRootViewModel viewModel) {
         // This is called when a InGameRootViewModel is created
-        viewModel.AddAnimal.Action = this.AddAnimalHandler;
         InGameRootViewModelManager.Add(viewModel);
     }
     
     public override void DisposingViewModel(uFrame.MVVM.ViewModel viewModel) {
         base.DisposingViewModel(viewModel);
         InGameRootViewModelManager.Remove(viewModel);
-    }
-    
-    public virtual void AddAnimal(InGameRootViewModel viewModel) {
-    }
-    
-    public virtual void AddAnimalHandler(AddAnimalCommand command) {
-        this.AddAnimal(command.Sender as InGameRootViewModel);
     }
 }
 

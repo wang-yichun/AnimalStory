@@ -12,11 +12,8 @@ using UnityEngine;
 
 public class InGameRootView : InGameRootViewBase
 {
-    
 	public GameObject MapContainerObj;
-	public GameObject BlueBirdAnimalPrefab;
-	public GameObject CoffeeCowAnimalPrefab;
-	public GameObject GreenFrogAnimalPrefab;
+	public GameObject[] AnimalsPrefab;
 
 	protected override void InitializeViewModel (uFrame.MVVM.ViewModel model)
 	{
@@ -38,15 +35,25 @@ public class InGameRootView : InGameRootViewBase
 	{
 		base.OnReady ();
 
-		GameObject bb = Instantiate (BlueBirdAnimalPrefab) as GameObject;
-		bb.transform.parent = this.MapContainerObj.transform;
-		var bbvm = bb.GetViewModel<BlueBirdAnimalViewModel> ();
-		this.InGameRoot.AnimalCollections.Add (bbvm);
+//		GameObject bb = Instantiate (AnimalsPrefab[0]) as GameObject;
+//		bb.transform.parent = this.MapContainerObj.transform;
+//		var bbvm = bb.GetViewModel<BlueBirdAnimalViewModel> ();
+//		this.InGameRoot.AnimalCollections.Add (bbvm);
+
+		this.createAnimal ();
 	}
 
-	public override void AddAnimalExecuted (AddAnimalCommand command)
+	public void createAnimal ()
 	{
-		GameObject bb = Instantiate (BlueBirdAnimalPrefab) as GameObject;
-		bb.transform.parent = this.MapContainerObj.transform;
+		for (int idx = 0; idx < MapContainerObj.transform.childCount; idx++) {
+			GameObject containerObj = MapContainerObj.transform.GetChild (idx).gameObject;
+					
+			GameObject animalObj = Instantiate (AnimalsPrefab [UnityEngine.Random.Range(0,3)]) as GameObject;
+			animalObj.transform.parent = containerObj.transform;
+			animalObj.transform.localPosition = Vector3.zero;
+
+			var avm = animalObj.GetViewModel<AnimalViewModel> ();
+			this.InGameRoot.AnimalCollections.Add (avm);
+		}
 	}
 }

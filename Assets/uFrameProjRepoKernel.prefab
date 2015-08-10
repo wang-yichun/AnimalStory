@@ -10,6 +10,7 @@ GameObject:
   - 4: {fileID: 422200}
   - 114: {fileID: 11482688}
   - 114: {fileID: 11474332}
+  - 114: {fileID: 11437024}
   m_Layer: 0
   m_Name: Services
   m_TagString: Untagged
@@ -25,6 +26,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 415012}
+  - 114: {fileID: 11485674}
   m_Layer: 0
   m_Name: SceneLoaders
   m_TagString: Untagged
@@ -126,6 +128,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2725fefcdb134dc6b25b44cd694cf95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &11437024
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 102050}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e495af70f54f4470cadcd6b542935631, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  xmin: 0
+  xmax: 0
+  ymin: 0
+  ymax: 0
 --- !u!114 &11474332
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -146,6 +163,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2b7b3ccfe33271448a9ded4e41ba9315, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &11485674
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 141916}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c091f38be0d2415a80998823d7bdf88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &11491686

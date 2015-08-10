@@ -130,6 +130,22 @@ Prefab:
       propertyPath: m_Name
       value: Kernel
       objectReference: {fileID: 0}
+    - target: {fileID: 11437024, guid: 2ccbfc0b2e95a46e0a1d3c167e142e6d, type: 2}
+      propertyPath: xmin
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11437024, guid: 2ccbfc0b2e95a46e0a1d3c167e142e6d, type: 2}
+      propertyPath: xmax
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 11437024, guid: 2ccbfc0b2e95a46e0a1d3c167e142e6d, type: 2}
+      propertyPath: ymin
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11437024, guid: 2ccbfc0b2e95a46e0a1d3c167e142e6d, type: 2}
+      propertyPath: ymax
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2ccbfc0b2e95a46e0a1d3c167e142e6d, type: 2}
   m_IsPrefabParent: 0

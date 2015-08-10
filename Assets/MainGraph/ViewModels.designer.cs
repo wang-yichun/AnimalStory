@@ -86,8 +86,6 @@ public partial class InGameRootViewModelBase : uFrame.MVVM.ViewModel {
     
     private ModelCollection<AnimalViewModel> _AnimalCollections;
     
-    private Signal<AddAnimalCommand> _AddAnimal;
-    
     public InGameRootViewModelBase(uFrame.Kernel.IEventAggregator aggregator) : 
             base(aggregator) {
     }
@@ -119,18 +117,8 @@ public partial class InGameRootViewModelBase : uFrame.MVVM.ViewModel {
         }
     }
     
-    public virtual Signal<AddAnimalCommand> AddAnimal {
-        get {
-            return _AddAnimal;
-        }
-        set {
-            _AddAnimal = value;
-        }
-    }
-    
     public override void Bind() {
         base.Bind();
-        this.AddAnimal = new Signal<AddAnimalCommand>(this);
         _AnimalCollections = new ModelCollection<AnimalViewModel>(this, "AnimalCollections");
         _InGameStateProperty = new InGameStateMachine(this, "InGameState");
     }
@@ -152,7 +140,6 @@ public partial class InGameRootViewModelBase : uFrame.MVVM.ViewModel {
     
     protected override void FillCommands(System.Collections.Generic.List<uFrame.MVVM.ViewModelCommandInfo> list) {
         base.FillCommands(list);
-        list.Add(new ViewModelCommandInfo("AddAnimal", AddAnimal) { ParameterType = typeof(void) });
     }
     
     protected override void FillProperties(System.Collections.Generic.List<uFrame.MVVM.ViewModelPropertyInfo> list) {

@@ -11,16 +11,12 @@ using UnityEngine;
 
 
 public class InGameRootController : InGameRootControllerBase {
-    
+	
+	[Inject] public Locator Locator;
+
     public override void InitializeInGameRoot(InGameRootViewModel viewModel) {
         base.InitializeInGameRoot(viewModel);
         // This is called when a InGameRootViewModel is created
     }
-
-	public override void AddAnimal (InGameRootViewModel viewModel)
-	{
-		base.AddAnimal (viewModel);
-		Debug.Log ("AddAnimal func Called!");
-	}
 }
  

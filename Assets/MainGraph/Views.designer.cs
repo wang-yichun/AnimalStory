@@ -138,10 +138,6 @@ public class InGameRootViewBase : uFrame.MVVM.ViewBase {
     [UnityEngine.Serialization.FormerlySerializedAsAttribute("_InGameStateonlyWhenChanged")]
     protected bool _InGameStateOnlyWhenChanged;
     
-    [UFToggleGroup("AddAnimal")]
-    [UnityEngine.HideInInspector()]
-    public bool _BindAddAnimal = true;
-    
     public override string DefaultIdentifier {
         get {
             return base.DefaultIdentifier;
@@ -176,9 +172,6 @@ public class InGameRootViewBase : uFrame.MVVM.ViewBase {
         if (_BindInGameState) {
             this.BindStateProperty(this.InGameRoot.InGameStateProperty, this.InGameStateChanged, _InGameStateOnlyWhenChanged);
         }
-        if (_BindAddAnimal) {
-            this.BindCommandExecuted(this.InGameRoot.AddAnimal, this.AddAnimalExecuted);
-        }
     }
     
     public virtual void InGameStateChanged(Invert.StateMachine.State arg1) {
@@ -200,17 +193,5 @@ public class InGameRootViewBase : uFrame.MVVM.ViewBase {
     }
     
     public virtual void OnStop() {
-    }
-    
-    public virtual void AddAnimalExecuted(AddAnimalCommand command) {
-    }
-    
-    public virtual void ExecuteAddAnimal() {
-        InGameRoot.AddAnimal.OnNext(new AddAnimalCommand() { Sender = InGameRoot });
-    }
-    
-    public virtual void ExecuteAddAnimal(AddAnimalCommand command) {
-        command.Sender = InGameRoot;
-        InGameRoot.AddAnimal.OnNext(command);
     }
 }
