@@ -168,6 +168,52 @@ Transform:
   m_Children: []
   m_Father: {fileID: 750981504}
   m_RootOrder: 11
+--- !u!1 &384887598
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 384887599}
+  - 114: {fileID: 384887600}
+  m_Layer: 0
+  m_Name: _TouchManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &384887599
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 384887598}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1313251345}
+  m_Father: {fileID: 500163607}
+  m_RootOrder: 3
+--- !u!114 &384887600
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 384887598}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -409488130, guid: 20c2a163775f09b4cafa29b19d0c9204, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  displayDevice: {fileID: 0}
+  shouldCreateCameraLayer: 1
+  useSendMessage: 0
+  sendMessageEvents: 60
+  sendMessageTarget: {fileID: 0}
+  layers: []
 --- !u!1 &465500368
 GameObject:
   m_ObjectHideFlags: 0
@@ -236,6 +282,7 @@ Transform:
   - {fileID: 576948036}
   - {fileID: 750981504}
   - {fileID: 1772491851}
+  - {fileID: 384887599}
   m_Father: {fileID: 0}
   m_RootOrder: 0
 --- !u!1 &576948031
@@ -250,6 +297,7 @@ GameObject:
   - 92: {fileID: 576948034}
   - 124: {fileID: 576948033}
   - 81: {fileID: 576948032}
+  - 114: {fileID: 576948037}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -323,6 +371,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 500163607}
   m_RootOrder: 0
+--- !u!114 &576948037
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 576948031}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 902259921, guid: 20c2a163775f09b4cafa29b19d0c9204, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: Main Camera
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  layerIds: 00000000
 --- !u!1 &579220799
 GameObject:
   m_ObjectHideFlags: 0
@@ -527,6 +591,67 @@ Transform:
   m_Children: []
   m_Father: {fileID: 750981504}
   m_RootOrder: 5
+--- !u!1 &1313251344
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1313251345}
+  - 114: {fileID: 1313251347}
+  - 114: {fileID: 1313251346}
+  m_Layer: 0
+  m_Name: Inputs
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1313251345
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1313251344}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 384887599}
+  m_RootOrder: 0
+--- !u!114 &1313251346
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1313251344}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 770742126, guid: 20c2a163775f09b4cafa29b19d0c9204, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  advancedProps: 0
+  DisableOnNonTouchPlatforms: 1
+  Tags:
+    tagList:
+    - Touch
+--- !u!114 &1313251347
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1313251344}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -102971247, guid: 20c2a163775f09b4cafa29b19d0c9204, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  advancedProps: 0
+  DisableOnMobilePlatforms: 1
+  Tags:
+    tagList:
+    - Mouse
 --- !u!1 &1346340934
 GameObject:
   m_ObjectHideFlags: 0
@@ -681,6 +806,9 @@ MonoBehaviour:
   _overrideViewModel: 1
   _BindInGameState: 1
   _InGameStateOnlyWhenChanged: 0
+  _BindAnimalCollections: 1
+  _AnimalCollectionsParent: {fileID: 0}
+  _AnimalCollectionsViewFirst: 0
   MapContainerObj: {fileID: 750981503}
   AnimalsPrefab:
   - {fileID: 132268, guid: b4c20541234d94651858d4095235ef4a, type: 2}

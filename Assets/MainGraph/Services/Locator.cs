@@ -14,15 +14,15 @@ public class Locator : LocatorBase
 	public int xmin, xmax;
 	public int ymin, ymax;
 
-	public bool IsOutScope (Loc loc)
+	public bool IsInScope (Loc loc)
 	{
-		return loc.x < xmin || loc.x > xmax || loc.y < ymin || loc.y > ymax;
+		return loc.x >= xmin || loc.x <= xmax || loc.y >= ymin || loc.y <= ymax;
 	}
 
 	public string Loc2Name (Loc loc)
 	{
-		if (this.IsOutScope (loc)) {
-			return "0" + loc.x + "0" + loc.y;
+		if (this.IsInScope (loc)) {
+			return "0" + loc.y + "0" + loc.x;
 		}
 		return null;
 	}

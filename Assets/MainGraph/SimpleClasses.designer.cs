@@ -42,3 +42,56 @@ public class LocBase : object {
         }
     }
 }
+
+public class CheckSameCountCommandBase : object {
+    
+    private AnimalViewModel _CenterAnimal;
+    
+    public AnimalViewModel CenterAnimal {
+        get {
+            return _CenterAnimal;
+        }
+        set {
+            _CenterAnimal = value;
+        }
+    }
+}
+
+public class InitMapContainerCommandBase : object {
+    
+    private InGameRootViewModel _InGameRootViewModel;
+    
+    public InGameRootViewModel InGameRootViewModel {
+        get {
+            return _InGameRootViewModel;
+        }
+        set {
+            _InGameRootViewModel = value;
+        }
+    }
+}
+
+public class AnimalPropBase : object {
+    
+    private AnimalType _AnimalType;
+    
+    private Loc _Loc;
+    
+    public AnimalType AnimalType {
+        get {
+            return _AnimalType;
+        }
+        set {
+            _AnimalType = value;
+        }
+    }
+    
+    public Loc Loc {
+        get {
+            return _Loc;
+        }
+        set {
+            _Loc = value;
+        }
+    }
+}

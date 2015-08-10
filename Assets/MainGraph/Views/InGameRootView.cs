@@ -40,20 +40,64 @@ public class InGameRootView : InGameRootViewBase
 //		var bbvm = bb.GetViewModel<BlueBirdAnimalViewModel> ();
 //		this.InGameRoot.AnimalCollections.Add (bbvm);
 
-		this.createAnimal ();
+//		this.createAnimal ();
+
+//		this.ExecuteCreateAnimal ();
+
+//		Publish (new InitMapContainerCommand () {
+//			InGameRootViewModel = this.InGameRoot
+//		});
+
+		this.ExecuteCreateAnimal (new AnimalProp () {
+			AnimalType = AnimalType.COFFEE_COW,
+			Loc = new Loc() {x = 1, y = 1}
+		});
 	}
 
-	public void createAnimal ()
-	{
-		for (int idx = 0; idx < MapContainerObj.transform.childCount; idx++) {
-			GameObject containerObj = MapContainerObj.transform.GetChild (idx).gameObject;
-					
-			GameObject animalObj = Instantiate (AnimalsPrefab [UnityEngine.Random.Range (0, 3)]) as GameObject;
-			animalObj.transform.parent = containerObj.transform;
-			animalObj.transform.localPosition = Vector3.zero;
+//	public void createAnimal ()
+//	{
+//		for (int idx = 0; idx < MapContainerObj.transform.childCount; idx++) {
+//			GameObject containerObj = MapContainerObj.transform.GetChild (idx).gameObject;
+//					
+//			GameObject animalObj = Instantiate (AnimalsPrefab [UnityEngine.Random.Range (0, 3)]) as GameObject;
+//			animalObj.transform.parent = containerObj.transform;
+//			animalObj.transform.localPosition = Vector3.zero;
+//
+//			var avm = animalObj.GetViewModel<AnimalViewModel> ();
+//			avm.Loc = new Loc();
+//			this.InGameRoot.AnimalCollections.Add (avm);
+//		}
+//	}
 
-			var avm = animalObj.GetViewModel<AnimalViewModel> ();
-			this.InGameRoot.AnimalCollections.Add (avm);
+	public override ViewBase AnimalCollectionsCreateView (ViewModel viewModel)
+	{
+		AnimalViewModel animalVM = viewModel as AnimalViewModel;
+
+		GameObject prefabSelected = null;
+		switch (animalVM.AnimalType) {
+		case AnimalType.BLUE_BIRD:
+			prefabSelected = this.AnimalsPrefab [0];
+			break;
+		case AnimalType.COFFEE_COW:
+			prefabSelected = this.AnimalsPrefab [1];
+			break;
+		case AnimalType.GREEN_FROG:
+			prefabSelected = this.AnimalsPrefab [2];
+			break;
+		default:
+			break;
 		}
+
+//		string name = new Locator().Loc2Name (new Loc (){ x = animalVM.Loc.x, y = animalVM.Loc.y });
+		string name = "0101";
+		Debug.Log (name);
+
+		GameObject containerObj = MapContainerObj.transform.FindChild (name).gameObject;
+
+		ViewBase animalV = InstantiateView (prefabSelected, viewModel);
+		animalV.gameObject.transform.position = containerObj.transform.localPosition;
+
+//		return animalV;  // err parent!!
+		return animalV;
 	}
 }

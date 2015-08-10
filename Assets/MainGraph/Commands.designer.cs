@@ -17,5 +17,19 @@ using uFrame.MVVM;
 using uFrame.Serialization;
 
 
-public partial class AddAnimalCommand : uFrame.MVVM.ViewModelCommand {
+public partial class TappedCommand : uFrame.MVVM.ViewModelCommand {
+}
+
+public partial class CreateAnimalCommand : uFrame.MVVM.ViewModelCommand {
+    
+    private AnimalProp _Argument;
+    
+    public AnimalProp Argument {
+        get {
+            return _Argument;
+        }
+        set {
+            _Argument = value;
+        }
+    }
 }

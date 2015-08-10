@@ -9,6 +9,8 @@ GameObject:
   m_Component:
   - 4: {fileID: 443800}
   - 114: {fileID: 11417450}
+  - 61: {fileID: 6196708}
+  - 114: {fileID: 11427946}
   m_Layer: 0
   m_Name: CoffeeCowAnimal
   m_TagString: Untagged
@@ -57,6 +59,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 443800}
   m_RootOrder: 0
+--- !u!61 &6196708
+BoxCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 109780}
+  m_Enabled: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Size: {x: 1.79999995, y: 1.79999995}
 --- !u!114 &11417450
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -72,7 +87,30 @@ MonoBehaviour:
   _InjectView: 0
   _BindOnStart: 1
   _DisposeOnDestroy: 0
-  _overrideViewModel: 0
+  _overrideViewModel: 1
+  _AnimalType: 1
+--- !u!114 &11427946
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 109780}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1235405773, guid: 20c2a163775f09b4cafa29b19d0c9204, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  advancedProps: 0
+  combineTouches: 0
+  combineTouchesInterval: .300000012
+  useSendMessage: 0
+  sendStateChangeMessages: 0
+  sendMessageTarget: {fileID: 0}
+  requireGestureToFail: {fileID: 0}
+  friendlyGestures: []
+  numberOfTapsRequired: 1
+  timeLimit: Infinity
+  distanceLimit: Infinity
 --- !u!212 &21221526
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -105,7 +143,23 @@ Prefab:
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: m_Size.x
+      value: 1.79999995
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_Size.y
+      value: 1.79999995
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: _overrideViewModel
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: _AnimalType
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 109780}

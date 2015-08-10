@@ -60,12 +60,20 @@ public class AnimalControllerBase : uFrame.MVVM.Controller {
     
     public virtual void InitializeAnimal(AnimalViewModel viewModel) {
         // This is called when a AnimalViewModel is created
+        viewModel.Tapped.Action = this.TappedHandler;
         AnimalViewModelManager.Add(viewModel);
     }
     
     public override void DisposingViewModel(uFrame.MVVM.ViewModel viewModel) {
         base.DisposingViewModel(viewModel);
         AnimalViewModelManager.Remove(viewModel);
+    }
+    
+    public virtual void Tapped(AnimalViewModel viewModel) {
+    }
+    
+    public virtual void TappedHandler(TappedCommand command) {
+        this.Tapped(command.Sender as AnimalViewModel);
     }
 }
 
@@ -110,12 +118,20 @@ public class InGameRootControllerBase : uFrame.MVVM.Controller {
     
     public virtual void InitializeInGameRoot(InGameRootViewModel viewModel) {
         // This is called when a InGameRootViewModel is created
+        viewModel.CreateAnimal.Action = this.CreateAnimalHandler;
         InGameRootViewModelManager.Add(viewModel);
     }
     
     public override void DisposingViewModel(uFrame.MVVM.ViewModel viewModel) {
         base.DisposingViewModel(viewModel);
         InGameRootViewModelManager.Remove(viewModel);
+    }
+    
+    public virtual void CreateAnimalHandler(CreateAnimalCommand command) {
+        this.CreateAnimal(command.Sender as InGameRootViewModel, command.Argument);
+    }
+    
+    public virtual void CreateAnimal(InGameRootViewModel viewModel, AnimalProp arg) {
     }
 }
 

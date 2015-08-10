@@ -25,6 +25,12 @@ public partial class AnimalViewModelBase : uFrame.MVVM.ViewModel {
     
     private P<AnimalType> _AnimalTypeProperty;
     
+    private P<Int32> _sameCountProperty;
+    
+    private P<Loc> _LocProperty;
+    
+    private Signal<TappedCommand> _Tapped;
+    
     public AnimalViewModelBase(uFrame.Kernel.IEventAggregator aggregator) : 
             base(aggregator) {
     }
@@ -38,6 +44,24 @@ public partial class AnimalViewModelBase : uFrame.MVVM.ViewModel {
         }
     }
     
+    public virtual P<Int32> sameCountProperty {
+        get {
+            return _sameCountProperty;
+        }
+        set {
+            _sameCountProperty = value;
+        }
+    }
+    
+    public virtual P<Loc> LocProperty {
+        get {
+            return _LocProperty;
+        }
+        set {
+            _LocProperty = value;
+        }
+    }
+    
     public virtual AnimalType AnimalType {
         get {
             return AnimalTypeProperty.Value;
@@ -47,29 +71,66 @@ public partial class AnimalViewModelBase : uFrame.MVVM.ViewModel {
         }
     }
     
+    public virtual Int32 sameCount {
+        get {
+            return sameCountProperty.Value;
+        }
+        set {
+            sameCountProperty.Value = value;
+        }
+    }
+    
+    public virtual Loc Loc {
+        get {
+            return LocProperty.Value;
+        }
+        set {
+            LocProperty.Value = value;
+        }
+    }
+    
+    public virtual Signal<TappedCommand> Tapped {
+        get {
+            return _Tapped;
+        }
+        set {
+            _Tapped = value;
+        }
+    }
+    
     public override void Bind() {
         base.Bind();
+        this.Tapped = new Signal<TappedCommand>(this);
         _AnimalTypeProperty = new P<AnimalType>(this, "AnimalType");
+        _sameCountProperty = new P<Int32>(this, "sameCount");
+        _LocProperty = new P<Loc>(this, "Loc");
     }
     
     public override void Read(ISerializerStream stream) {
         base.Read(stream);
         this.AnimalType = (AnimalType)stream.DeserializeInt("AnimalType");;
+        this.sameCount = stream.DeserializeInt("sameCount");;
     }
     
     public override void Write(ISerializerStream stream) {
         base.Write(stream);
         stream.SerializeInt("AnimalType", (int)this.AnimalType);;
+        stream.SerializeInt("sameCount", this.sameCount);
     }
     
     protected override void FillCommands(System.Collections.Generic.List<uFrame.MVVM.ViewModelCommandInfo> list) {
         base.FillCommands(list);
+        list.Add(new ViewModelCommandInfo("Tapped", Tapped) { ParameterType = typeof(void) });
     }
     
     protected override void FillProperties(System.Collections.Generic.List<uFrame.MVVM.ViewModelPropertyInfo> list) {
         base.FillProperties(list);
         // PropertiesChildItem
         list.Add(new ViewModelPropertyInfo(_AnimalTypeProperty, false, false, true, false));
+        // PropertiesChildItem
+        list.Add(new ViewModelPropertyInfo(_sameCountProperty, false, false, false, false));
+        // PropertiesChildItem
+        list.Add(new ViewModelPropertyInfo(_LocProperty, false, false, false, false));
     }
 }
 
@@ -85,6 +146,8 @@ public partial class InGameRootViewModelBase : uFrame.MVVM.ViewModel {
     private InGameStateMachine _InGameStateProperty;
     
     private ModelCollection<AnimalViewModel> _AnimalCollections;
+    
+    private Signal<CreateAnimalCommand> _CreateAnimal;
     
     public InGameRootViewModelBase(uFrame.Kernel.IEventAggregator aggregator) : 
             base(aggregator) {
@@ -117,8 +180,18 @@ public partial class InGameRootViewModelBase : uFrame.MVVM.ViewModel {
         }
     }
     
+    public virtual Signal<CreateAnimalCommand> CreateAnimal {
+        get {
+            return _CreateAnimal;
+        }
+        set {
+            _CreateAnimal = value;
+        }
+    }
+    
     public override void Bind() {
         base.Bind();
+        this.CreateAnimal = new Signal<CreateAnimalCommand>(this);
         _AnimalCollections = new ModelCollection<AnimalViewModel>(this, "AnimalCollections");
         _InGameStateProperty = new InGameStateMachine(this, "InGameState");
     }
@@ -140,6 +213,7 @@ public partial class InGameRootViewModelBase : uFrame.MVVM.ViewModel {
     
     protected override void FillCommands(System.Collections.Generic.List<uFrame.MVVM.ViewModelCommandInfo> list) {
         base.FillCommands(list);
+        list.Add(new ViewModelCommandInfo("CreateAnimal", CreateAnimal) { ParameterType = typeof(AnimalProp) });
     }
     
     protected override void FillProperties(System.Collections.Generic.List<uFrame.MVVM.ViewModelPropertyInfo> list) {

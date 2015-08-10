@@ -56,7 +56,7 @@ public class BlueBirdAnimalViewBase : AnimalView {
     }
 }
 
-public class CoffeeCowAnimalViewBase : uFrame.MVVM.ViewBase {
+public class CoffeeCowAnimalViewBase : AnimalView {
     
     public override string DefaultIdentifier {
         get {
@@ -91,7 +91,7 @@ public class CoffeeCowAnimalViewBase : uFrame.MVVM.ViewBase {
     }
 }
 
-public class GreenFrogAnimalViewBase : uFrame.MVVM.ViewBase {
+public class GreenFrogAnimalViewBase : AnimalView {
     
     public override string DefaultIdentifier {
         get {
@@ -138,6 +138,22 @@ public class InGameRootViewBase : uFrame.MVVM.ViewBase {
     [UnityEngine.Serialization.FormerlySerializedAsAttribute("_InGameStateonlyWhenChanged")]
     protected bool _InGameStateOnlyWhenChanged;
     
+    [UFToggleGroup("AnimalCollections")]
+    [UnityEngine.HideInInspector()]
+    public bool _BindAnimalCollections = true;
+    
+    [UFGroup("AnimalCollections")]
+    [UnityEngine.SerializeField()]
+    [UnityEngine.HideInInspector()]
+    [UnityEngine.Serialization.FormerlySerializedAsAttribute("_AnimalCollectionsparent")]
+    protected UnityEngine.Transform _AnimalCollectionsParent;
+    
+    [UFGroup("AnimalCollections")]
+    [UnityEngine.SerializeField()]
+    [UnityEngine.HideInInspector()]
+    [UnityEngine.Serialization.FormerlySerializedAsAttribute("_AnimalCollectionsviewFirst")]
+    protected bool _AnimalCollectionsViewFirst;
+    
     public override string DefaultIdentifier {
         get {
             return base.DefaultIdentifier;
@@ -172,6 +188,9 @@ public class InGameRootViewBase : uFrame.MVVM.ViewBase {
         if (_BindInGameState) {
             this.BindStateProperty(this.InGameRoot.InGameStateProperty, this.InGameStateChanged, _InGameStateOnlyWhenChanged);
         }
+        if (_BindAnimalCollections) {
+            this.BindToViewCollection(this.InGameRoot.AnimalCollections, this.AnimalCollectionsCreateView, this.AnimalCollectionsAdded, this.AnimalCollectionsRemoved, _AnimalCollectionsParent, _AnimalCollectionsViewFirst);
+        }
     }
     
     public virtual void InGameStateChanged(Invert.StateMachine.State arg1) {
@@ -194,6 +213,25 @@ public class InGameRootViewBase : uFrame.MVVM.ViewBase {
     
     public virtual void OnStop() {
     }
+    
+    public virtual uFrame.MVVM.ViewBase AnimalCollectionsCreateView(uFrame.MVVM.ViewModel viewModel) {
+        return InstantiateView(viewModel);
+    }
+    
+    public virtual void AnimalCollectionsAdded(uFrame.MVVM.ViewBase view) {
+    }
+    
+    public virtual void AnimalCollectionsRemoved(uFrame.MVVM.ViewBase view) {
+    }
+    
+    public virtual void ExecuteCreateAnimal(CreateAnimalCommand command) {
+        command.Sender = InGameRoot;
+        InGameRoot.CreateAnimal.OnNext(command);
+    }
+    
+    public virtual void ExecuteCreateAnimal(AnimalProp arg) {
+        InGameRoot.CreateAnimal.OnNext(new CreateAnimalCommand() { Sender = InGameRoot, Argument = arg });
+    }
 }
 
 public class AnimalViewBase : uFrame.MVVM.ViewBase {
@@ -202,6 +240,16 @@ public class AnimalViewBase : uFrame.MVVM.ViewBase {
     [UFGroup("View Model Properties")]
     [UnityEngine.HideInInspector()]
     public AnimalType _AnimalType;
+    
+    [UnityEngine.SerializeField()]
+    [UFGroup("View Model Properties")]
+    [UnityEngine.HideInInspector()]
+    public Int32 _sameCount;
+    
+    [UnityEngine.SerializeField()]
+    [UFGroup("View Model Properties")]
+    [UnityEngine.HideInInspector()]
+    public Loc _Loc;
     
     public override string DefaultIdentifier {
         get {
@@ -228,6 +276,8 @@ public class AnimalViewBase : uFrame.MVVM.ViewBase {
         // This method is invoked when applying the data from the inspector to the viewmodel.  Add any view-specific customizations here.
         var animalview = ((AnimalViewModel)model);
         animalview.AnimalType = this._AnimalType;
+        animalview.sameCount = this._sameCount;
+        animalview.Loc = this._Loc;
     }
     
     public override void Bind() {
@@ -235,5 +285,14 @@ public class AnimalViewBase : uFrame.MVVM.ViewBase {
         // Use this.Animal to access the viewmodel.
         // Use this method to subscribe to the view-model.
         // Any designer bindings are created in the base implementation.
+    }
+    
+    public virtual void ExecuteTapped() {
+        Animal.Tapped.OnNext(new TappedCommand() { Sender = Animal });
+    }
+    
+    public virtual void ExecuteTapped(TappedCommand command) {
+        command.Sender = Animal;
+        Animal.Tapped.OnNext(command);
     }
 }

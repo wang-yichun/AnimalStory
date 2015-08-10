@@ -7,6 +7,7 @@ using uFrame.Serialization;
 using uFrame.MVVM;
 using uFrame.Kernel;
 using uFrame.IOC;
+using UnityEngine;
 
 
 public class AnimalController : AnimalControllerBase {
@@ -16,4 +17,12 @@ public class AnimalController : AnimalControllerBase {
 		base.InitializeAnimal (viewModel);
 		// This is called when a CharacterViewModel is created
 	}
+
+    public override void Tapped(AnimalViewModel viewModel) {
+        base.Tapped(viewModel);
+		
+		Debug.Log ("tapped: " + viewModel.AnimalType);
+
+
+    }
 }

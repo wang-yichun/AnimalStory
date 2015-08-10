@@ -9,21 +9,41 @@ using uFrame.MVVM.Bindings;
 using uFrame.Serialization;
 using UniRx;
 using UnityEngine;
+using TouchScript.Gestures;
 
+public class AnimalView : AnimalViewBase
+{
+    
+	protected override void InitializeViewModel (uFrame.MVVM.ViewModel model)
+	{
+		base.InitializeViewModel (model);
+		// NOTE: this method is only invoked if the 'Initialize ViewModel' is checked in the inspector.
+		// var vm = model as AnimalViewModel;
+		// This method is invoked when applying the data from the inspector to the viewmodel.  Add any view-specific customizations here.
+	}
+    
+	public override void Bind ()
+	{
+		base.Bind ();
+		// Use this.Animal to access the viewmodel.
+		// Use this method to subscribe to the view-model.
+		// Any designer bindings are created in the base implementation.
+	}
 
-public class AnimalView : AnimalViewBase {
-    
-    protected override void InitializeViewModel(uFrame.MVVM.ViewModel model) {
-        base.InitializeViewModel(model);
-        // NOTE: this method is only invoked if the 'Initialize ViewModel' is checked in the inspector.
-        // var vm = model as AnimalViewModel;
-        // This method is invoked when applying the data from the inspector to the viewmodel.  Add any view-specific customizations here.
-    }
-    
-    public override void Bind() {
-        base.Bind();
-        // Use this.Animal to access the viewmodel.
-        // Use this method to subscribe to the view-model.
-        // Any designer bindings are created in the base implementation.
-    }
+	private void OnEnable ()
+	{
+		// subscribe to gesture's Tapped event
+		GetComponent<TapGesture> ().Tapped += tappedHandler;
+	}
+	
+	private void OnDisable ()
+	{
+		// don't forget to unsubscribe
+		GetComponent<TapGesture> ().Tapped -= tappedHandler;
+	}
+	
+	private void tappedHandler (object sender, EventArgs e)
+	{
+		this.ExecuteTapped ();
+	}
 }

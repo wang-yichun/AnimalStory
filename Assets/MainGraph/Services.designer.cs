@@ -29,3 +29,43 @@ public class LocatorBase : uFrame.Kernel.SystemServiceMonoBehavior {
         base.Setup();
     }
 }
+
+public class CalcServiceBase : uFrame.Kernel.SystemServiceMonoBehavior {
+    
+    /// <summary>
+    /// This method is invoked whenever the kernel is loading.
+    /// Since the kernel lives throughout the entire lifecycle of the game, this will only be invoked once.
+    /// </summary>
+    public override void Setup() {
+        base.Setup();
+        this.OnEvent<CheckSameCountCommand>().Subscribe(this.CheckSameCountCommandHandler);
+    }
+    
+    /// <summary>
+    // This method is executed when using this.Publish(new CheckSameCountCommand())
+    /// </summary>
+    public virtual void CheckSameCountCommandHandler(CheckSameCountCommand data) {
+        // Process the commands information.  Also, you can publish new events by using the line below.
+        // this.Publish(new AnotherEvent())
+    }
+}
+
+public class CommonBase : uFrame.Kernel.SystemServiceMonoBehavior {
+    
+    /// <summary>
+    /// This method is invoked whenever the kernel is loading.
+    /// Since the kernel lives throughout the entire lifecycle of the game, this will only be invoked once.
+    /// </summary>
+    public override void Setup() {
+        base.Setup();
+        this.OnEvent<InitMapContainerCommand>().Subscribe(this.InitMapContainerCommandHandler);
+    }
+    
+    /// <summary>
+    // This method is executed when using this.Publish(new InitMapContainerCommand())
+    /// </summary>
+    public virtual void InitMapContainerCommandHandler(InitMapContainerCommand data) {
+        // Process the commands information.  Also, you can publish new events by using the line below.
+        // this.Publish(new AnotherEvent())
+    }
+}
