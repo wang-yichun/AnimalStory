@@ -21,7 +21,7 @@ using UniRx;
 using UnityEngine;
 
 
-public class BlueBirdAnimalViewBase : uFrame.MVVM.ViewBase {
+public class BlueBirdAnimalViewBase : AnimalView {
     
     public override string DefaultIdentifier {
         get {
@@ -193,5 +193,47 @@ public class InGameRootViewBase : uFrame.MVVM.ViewBase {
     }
     
     public virtual void OnStop() {
+    }
+}
+
+public class AnimalViewBase : uFrame.MVVM.ViewBase {
+    
+    [UnityEngine.SerializeField()]
+    [UFGroup("View Model Properties")]
+    [UnityEngine.HideInInspector()]
+    public AnimalType _AnimalType;
+    
+    public override string DefaultIdentifier {
+        get {
+            return base.DefaultIdentifier;
+        }
+    }
+    
+    public override System.Type ViewModelType {
+        get {
+            return typeof(AnimalViewModel);
+        }
+    }
+    
+    public AnimalViewModel Animal {
+        get {
+            return (AnimalViewModel)ViewModelObject;
+        }
+    }
+    
+    protected override void InitializeViewModel(uFrame.MVVM.ViewModel model) {
+        base.InitializeViewModel(model);
+        // NOTE: this method is only invoked if the 'Initialize ViewModel' is checked in the inspector.
+        // var vm = model as AnimalViewModel;
+        // This method is invoked when applying the data from the inspector to the viewmodel.  Add any view-specific customizations here.
+        var animalview = ((AnimalViewModel)model);
+        animalview.AnimalType = this._AnimalType;
+    }
+    
+    public override void Bind() {
+        base.Bind();
+        // Use this.Animal to access the viewmodel.
+        // Use this method to subscribe to the view-model.
+        // Any designer bindings are created in the base implementation.
     }
 }

@@ -48,7 +48,7 @@ public class InGameRootView : InGameRootViewBase
 		for (int idx = 0; idx < MapContainerObj.transform.childCount; idx++) {
 			GameObject containerObj = MapContainerObj.transform.GetChild (idx).gameObject;
 					
-			GameObject animalObj = Instantiate (AnimalsPrefab [UnityEngine.Random.Range(0,3)]) as GameObject;
+			GameObject animalObj = Instantiate (AnimalsPrefab [UnityEngine.Random.Range (0, 3)]) as GameObject;
 			animalObj.transform.parent = containerObj.transform;
 			animalObj.transform.localPosition = Vector3.zero;
 
