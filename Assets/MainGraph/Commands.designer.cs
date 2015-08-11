@@ -51,6 +51,9 @@ public partial class RemoveAnimalCommand : uFrame.MVVM.ViewModelCommand {
     }
 }
 
+public partial class CreateAndDropCommand : uFrame.MVVM.ViewModelCommand {
+}
+
 public partial class InitAllAnimalCommand : uFrame.MVVM.ViewModelCommand {
 }
 
@@ -69,4 +72,7 @@ public partial class RefreshSameCountCommand : uFrame.MVVM.ViewModelCommand {
             _Argument = value;
         }
     }
+}
+
+public partial class CalcAnimalsCountCommand : uFrame.MVVM.ViewModelCommand {
 }

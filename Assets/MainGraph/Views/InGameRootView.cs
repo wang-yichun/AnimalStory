@@ -9,11 +9,15 @@ using uFrame.MVVM.Bindings;
 using uFrame.Serialization;
 using UniRx;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InGameRootView : InGameRootViewBase
 {
 	public GameObject MapContainerObj;
 	public GameObject[] AnimalsPrefab;
+
+	public GameObject IdleAnimalsCountText;
+
 
 	protected override void InitializeViewModel (uFrame.MVVM.ViewModel model)
 	{
@@ -27,7 +31,8 @@ public class InGameRootView : InGameRootViewBase
 			xmax = 5,
 			xmin = 1,
 			ymax = 3,
-			ymin = 1
+			ymin = 1,
+			TotalAnimalCount = 15
 		};
 
 		viewModel.RuleInfo = new RuleInfo () {
@@ -85,4 +90,14 @@ public class InGameRootView : InGameRootViewBase
 		base.AnimalCollectionsRemoved (view);
 		Destroy (view.gameObject);
 	}
+
+    public override void IdleAnimalsCountChanged(Int32 arg1) {
+		IdleAnimalsCountText.GetComponent<Text>().text = "IdleAnimalsCountText: " + arg1;
+    }
+
+    public override void ShouldCreateAndDropChanged(Boolean arg1) {
+		if (arg1) {
+			this.ExecuteCreateAndDrop();
+		}
+    }
 }

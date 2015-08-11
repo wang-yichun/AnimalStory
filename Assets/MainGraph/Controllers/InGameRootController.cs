@@ -32,13 +32,18 @@ public class InGameRootController : InGameRootControllerBase
 		animalVM.Loc = arg.Loc;
 
 		viewModel.AnimalCollections.Add (animalVM);
+
+		viewModel.CalcAnimalsCount.OnNext (new CalcAnimalsCountCommand ());
 	}
 	
-	public override void RemoveAnimal(InGameRootViewModel viewModel, AnimalProp arg) {
-		base.RemoveAnimal(viewModel, arg);
+	public override void RemoveAnimal (InGameRootViewModel viewModel, AnimalProp arg)
+	{
+		base.RemoveAnimal (viewModel, arg);
 
 		AnimalViewModel vm = this.GetAnimalAtLoc (viewModel, arg.Loc);
 		viewModel.AnimalCollections.Remove (vm);
+
+		viewModel.CalcAnimalsCount.OnNext (new CalcAnimalsCountCommand ());
 	}
 
 	public override void InitAllAnimal (InGameRootViewModel viewModel)
@@ -116,11 +121,62 @@ public class InGameRootController : InGameRootControllerBase
 			}
 		}
 
+		viewModel.CalcAnimalsCount.OnNext (new CalcAnimalsCountCommand ());
 	}
 
 	public AnimalViewModel GetAnimalAtLoc (InGameRootViewModel viewModel, Loc loc)
 	{
-		return viewModel.AnimalCollections.Where (vm => vm.Loc == loc).SingleOrDefault();
+		return viewModel.AnimalCollections.Where (vm => vm.Loc == loc).SingleOrDefault ();
 	}
 
+	public override void CalcAnimalsCount (InGameRootViewModel viewModel)
+	{
+		base.CalcAnimalsCount (viewModel);
+
+		int nullCounn = viewModel.MapInfo.TotalAnimalCount - viewModel.AnimalCollections.Count;
+
+		viewModel.NullAnimalsCount = nullCounn;
+
+		int idleCount = viewModel.AnimalCollections
+			.Where (animal => animal.AnimalState is Idle && animal.needDestroy == false)
+				.Count ();
+		
+		viewModel.IdleAnimalsCount = idleCount;
+	}
+
+	public override void CreateAndDrop (InGameRootViewModel viewModel)
+	{
+		base.CreateAndDrop (viewModel);
+		Debug.Log ("todo: CreateAndDrop");
+
+		List<int> nullCollInfo = getNullCountByCol (viewModel);
+	}
+
+	public List<int> getNullCountByCol (InGameRootViewModel viewModel)
+	{
+		var dictionary = viewModel.AnimalCollections
+			.GroupBy (animal => new {animal.Loc.x})
+				.ToDictionary (it => it.Key.x, it => it.Count ());
+//				.ToList ();
+
+		foreach (var it in dictionary) {
+			Debug.Log(it.Key + " : " + it.Value);
+		}
+
+		return null;
+//		var queryLastNames =
+//			from student in students
+//				group student by student.LastName into newGroup
+//				orderby newGroup.Key
+//				select newGroup;
+//		
+//		foreach (var nameGroup in queryLastNames)
+//		{
+//			Console.WriteLine("Key: {0}", nameGroup.Key);
+//			foreach (var student in nameGroup)
+//			{
+//				Console.WriteLine("\t{0}, {1}", student.LastName, student.FirstName);
+//			}
+//		}
+	}
 }

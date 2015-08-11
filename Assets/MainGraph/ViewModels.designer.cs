@@ -360,11 +360,23 @@ public partial class AnimalViewModel {
 
 public partial class InGameRootViewModelBase : uFrame.MVVM.ViewModel {
     
+    private System.IDisposable _CanTapDisposable;
+    
+    private System.IDisposable _ShouldCreateAndDropDisposable;
+    
     private InGameStateMachine _InGameStateProperty;
+    
+    private P<Boolean> _CanTapProperty;
+    
+    private P<Boolean> _ShouldCreateAndDropProperty;
     
     private P<MapInfo> _MapInfoProperty;
     
     private P<RuleInfo> _RuleInfoProperty;
+    
+    private P<Int32> _IdleAnimalsCountProperty;
+    
+    private P<Int32> _NullAnimalsCountProperty;
     
     private ModelCollection<AnimalViewModel> _AnimalCollections;
     
@@ -372,11 +384,15 @@ public partial class InGameRootViewModelBase : uFrame.MVVM.ViewModel {
     
     private Signal<RemoveAnimalCommand> _RemoveAnimal;
     
+    private Signal<CreateAndDropCommand> _CreateAndDrop;
+    
     private Signal<InitAllAnimalCommand> _InitAllAnimal;
     
     private Signal<TestCommandCommand> _TestCommand;
     
     private Signal<RefreshSameCountCommand> _RefreshSameCount;
+    
+    private Signal<CalcAnimalsCountCommand> _CalcAnimalsCount;
     
     public InGameRootViewModelBase(uFrame.Kernel.IEventAggregator aggregator) : 
             base(aggregator) {
@@ -400,6 +416,24 @@ public partial class InGameRootViewModelBase : uFrame.MVVM.ViewModel {
         }
     }
     
+    public virtual P<Boolean> CanTapProperty {
+        get {
+            return _CanTapProperty;
+        }
+        set {
+            _CanTapProperty = value;
+        }
+    }
+    
+    public virtual P<Boolean> ShouldCreateAndDropProperty {
+        get {
+            return _ShouldCreateAndDropProperty;
+        }
+        set {
+            _ShouldCreateAndDropProperty = value;
+        }
+    }
+    
     public virtual P<MapInfo> MapInfoProperty {
         get {
             return _MapInfoProperty;
@@ -418,6 +452,42 @@ public partial class InGameRootViewModelBase : uFrame.MVVM.ViewModel {
         }
     }
     
+    public virtual P<Int32> IdleAnimalsCountProperty {
+        get {
+            return _IdleAnimalsCountProperty;
+        }
+        set {
+            _IdleAnimalsCountProperty = value;
+        }
+    }
+    
+    public virtual P<Int32> NullAnimalsCountProperty {
+        get {
+            return _NullAnimalsCountProperty;
+        }
+        set {
+            _NullAnimalsCountProperty = value;
+        }
+    }
+    
+    public virtual Boolean CanTap {
+        get {
+            return CanTapProperty.Value;
+        }
+        set {
+            CanTapProperty.Value = value;
+        }
+    }
+    
+    public virtual Boolean ShouldCreateAndDrop {
+        get {
+            return ShouldCreateAndDropProperty.Value;
+        }
+        set {
+            ShouldCreateAndDropProperty.Value = value;
+        }
+    }
+    
     public virtual MapInfo MapInfo {
         get {
             return MapInfoProperty.Value;
@@ -433,6 +503,24 @@ public partial class InGameRootViewModelBase : uFrame.MVVM.ViewModel {
         }
         set {
             RuleInfoProperty.Value = value;
+        }
+    }
+    
+    public virtual Int32 IdleAnimalsCount {
+        get {
+            return IdleAnimalsCountProperty.Value;
+        }
+        set {
+            IdleAnimalsCountProperty.Value = value;
+        }
+    }
+    
+    public virtual Int32 NullAnimalsCount {
+        get {
+            return NullAnimalsCountProperty.Value;
+        }
+        set {
+            NullAnimalsCountProperty.Value = value;
         }
     }
     
@@ -463,6 +551,15 @@ public partial class InGameRootViewModelBase : uFrame.MVVM.ViewModel {
         }
     }
     
+    public virtual Signal<CreateAndDropCommand> CreateAndDrop {
+        get {
+            return _CreateAndDrop;
+        }
+        set {
+            _CreateAndDrop = value;
+        }
+    }
+    
     public virtual Signal<InitAllAnimalCommand> InitAllAnimal {
         get {
             return _InitAllAnimal;
@@ -490,22 +587,41 @@ public partial class InGameRootViewModelBase : uFrame.MVVM.ViewModel {
         }
     }
     
+    public virtual Signal<CalcAnimalsCountCommand> CalcAnimalsCount {
+        get {
+            return _CalcAnimalsCount;
+        }
+        set {
+            _CalcAnimalsCount = value;
+        }
+    }
+    
     public override void Bind() {
         base.Bind();
         this.CreateAnimal = new Signal<CreateAnimalCommand>(this);
         this.RemoveAnimal = new Signal<RemoveAnimalCommand>(this);
+        this.CreateAndDrop = new Signal<CreateAndDropCommand>(this);
         this.InitAllAnimal = new Signal<InitAllAnimalCommand>(this);
         this.TestCommand = new Signal<TestCommandCommand>(this);
         this.RefreshSameCount = new Signal<RefreshSameCountCommand>(this);
+        this.CalcAnimalsCount = new Signal<CalcAnimalsCountCommand>(this);
+        _CanTapProperty = new P<Boolean>(this, "CanTap");
+        _ShouldCreateAndDropProperty = new P<Boolean>(this, "ShouldCreateAndDrop");
         _MapInfoProperty = new P<MapInfo>(this, "MapInfo");
         _RuleInfoProperty = new P<RuleInfo>(this, "RuleInfo");
+        _IdleAnimalsCountProperty = new P<Int32>(this, "IdleAnimalsCount");
+        _NullAnimalsCountProperty = new P<Int32>(this, "NullAnimalsCount");
         _AnimalCollections = new ModelCollection<AnimalViewModel>(this, "AnimalCollections");
         _InGameStateProperty = new InGameStateMachine(this, "InGameState");
+        ResetCanTap();
+        ResetShouldCreateAndDrop();
     }
     
     public override void Read(ISerializerStream stream) {
         base.Read(stream);
         this._InGameStateProperty.SetState(stream.DeserializeString("InGameState"));
+        this.IdleAnimalsCount = stream.DeserializeInt("IdleAnimalsCount");;
+        this.NullAnimalsCount = stream.DeserializeInt("NullAnimalsCount");;
         if (stream.DeepSerialize) {
             this.AnimalCollections.Clear();
             this.AnimalCollections.AddRange(stream.DeserializeObjectArray<AnimalViewModel>("AnimalCollections"));
@@ -515,6 +631,8 @@ public partial class InGameRootViewModelBase : uFrame.MVVM.ViewModel {
     public override void Write(ISerializerStream stream) {
         base.Write(stream);
         stream.SerializeString("InGameState", this.InGameState.Name);;
+        stream.SerializeInt("IdleAnimalsCount", this.IdleAnimalsCount);
+        stream.SerializeInt("NullAnimalsCount", this.NullAnimalsCount);
         if (stream.DeepSerialize) stream.SerializeArray("AnimalCollections", this.AnimalCollections);
     }
     
@@ -522,20 +640,64 @@ public partial class InGameRootViewModelBase : uFrame.MVVM.ViewModel {
         base.FillCommands(list);
         list.Add(new ViewModelCommandInfo("CreateAnimal", CreateAnimal) { ParameterType = typeof(AnimalProp) });
         list.Add(new ViewModelCommandInfo("RemoveAnimal", RemoveAnimal) { ParameterType = typeof(AnimalProp) });
+        list.Add(new ViewModelCommandInfo("CreateAndDrop", CreateAndDrop) { ParameterType = typeof(void) });
         list.Add(new ViewModelCommandInfo("InitAllAnimal", InitAllAnimal) { ParameterType = typeof(void) });
         list.Add(new ViewModelCommandInfo("TestCommand", TestCommand) { ParameterType = typeof(void) });
         list.Add(new ViewModelCommandInfo("RefreshSameCount", RefreshSameCount) { ParameterType = typeof(AnimalViewModel) });
+        list.Add(new ViewModelCommandInfo("CalcAnimalsCount", CalcAnimalsCount) { ParameterType = typeof(void) });
     }
     
     protected override void FillProperties(System.Collections.Generic.List<uFrame.MVVM.ViewModelPropertyInfo> list) {
         base.FillProperties(list);
+        // ComputedPropertyNode
+        list.Add(new ViewModelPropertyInfo(_CanTapProperty, false, false, false, true));
+        // ComputedPropertyNode
+        list.Add(new ViewModelPropertyInfo(_ShouldCreateAndDropProperty, false, false, false, true));
         // PropertiesChildItem
         list.Add(new ViewModelPropertyInfo(_InGameStateProperty, false, false, false, false));
         // PropertiesChildItem
         list.Add(new ViewModelPropertyInfo(_MapInfoProperty, false, false, false, false));
         // PropertiesChildItem
         list.Add(new ViewModelPropertyInfo(_RuleInfoProperty, false, false, false, false));
+        // PropertiesChildItem
+        list.Add(new ViewModelPropertyInfo(_IdleAnimalsCountProperty, false, false, false, false));
+        // PropertiesChildItem
+        list.Add(new ViewModelPropertyInfo(_NullAnimalsCountProperty, false, false, false, false));
         list.Add(new ViewModelPropertyInfo(_AnimalCollections, true, true, false, false));
+    }
+    
+    public virtual System.Collections.Generic.IEnumerable<uFrame.MVVM.IObservableProperty> GetCanTapDependents() {
+        yield return IdleAnimalsCountProperty;
+        yield return NullAnimalsCountProperty;
+        yield break;
+    }
+    
+    public virtual System.Collections.Generic.IEnumerable<uFrame.MVVM.IObservableProperty> GetShouldCreateAndDropDependents() {
+        yield return IdleAnimalsCountProperty;
+        yield return NullAnimalsCountProperty;
+        yield break;
+    }
+    
+    public virtual void ResetCanTap() {
+        if (_CanTapDisposable != null) {
+            _CanTapDisposable.Dispose();
+        }
+        _CanTapDisposable = _CanTapProperty.ToComputed(ComputeCanTap, this.GetCanTapDependents().ToArray()).DisposeWith(this);
+    }
+    
+    public virtual void ResetShouldCreateAndDrop() {
+        if (_ShouldCreateAndDropDisposable != null) {
+            _ShouldCreateAndDropDisposable.Dispose();
+        }
+        _ShouldCreateAndDropDisposable = _ShouldCreateAndDropProperty.ToComputed(ComputeShouldCreateAndDrop, this.GetShouldCreateAndDropDependents().ToArray()).DisposeWith(this);
+    }
+    
+    public virtual Boolean ComputeCanTap() {
+        return default(Boolean);
+    }
+    
+    public virtual Boolean ComputeShouldCreateAndDrop() {
+        return default(Boolean);
     }
 }
 

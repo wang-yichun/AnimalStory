@@ -27,17 +27,23 @@ public class AnimalController : AnimalControllerBase
 		base.Tapped (viewModel);
 		
 		Debug.Log ("tapped: " + viewModel.AnimalType);
-		InGameRoot.RefreshSameCount.OnNext (new RefreshSameCountCommand () {
-			Argument = viewModel
-		});
+
+		if (InGameRoot.CanTap) {
+			InGameRoot.RefreshSameCount.OnNext (new RefreshSameCountCommand () {
+				Argument = viewModel
+			});
+		} else {
+			Debug.Log ("can not tap");
+		}
 
 	}
 
-    public override void DestroySelf(AnimalViewModel viewModel) {
-        base.DestroySelf(viewModel);
+	public override void DestroySelf (AnimalViewModel viewModel)
+	{
+		base.DestroySelf (viewModel);
 		InGameRoot.RemoveAnimal.OnNext (new RemoveAnimalCommand (){
 			Argument = new AnimalProp(viewModel)
 		});
-    }
+	}
 
 }

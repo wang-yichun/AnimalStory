@@ -106,6 +106,8 @@ public class MapInfoBase : object {
     
     private Int32 _ymax;
     
+    private Int32 _TotalAnimalCount;
+    
     public Int32 xmin {
         get {
             return _xmin;
@@ -139,6 +141,15 @@ public class MapInfoBase : object {
         }
         set {
             _ymax = value;
+        }
+    }
+    
+    public Int32 TotalAnimalCount {
+        get {
+            return _TotalAnimalCount;
+        }
+        set {
+            _TotalAnimalCount = value;
         }
     }
 }

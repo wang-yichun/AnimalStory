@@ -12,8 +12,23 @@ using UniRx;
 
 
 public partial class InGameRootViewModel : InGameRootViewModelBase {
+
 	public override void Bind ()
 	{
 		base.Bind ();
+	}
+
+	public override bool ComputeCanTap ()
+	{
+		if (MapInfo == null)
+			return false;
+		return IdleAnimalsCount == MapInfo.TotalAnimalCount && NullAnimalsCount == 0;
+	}
+
+	public override bool ComputeShouldCreateAndDrop ()
+	{
+		if (MapInfo == null) 
+			return false;
+		return NullAnimalsCount > 0 && IdleAnimalsCount + NullAnimalsCount == MapInfo.TotalAnimalCount;
 	}
 }

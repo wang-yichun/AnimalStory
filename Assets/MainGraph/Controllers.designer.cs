@@ -152,9 +152,11 @@ public class InGameRootControllerBase : uFrame.MVVM.Controller {
         // This is called when a InGameRootViewModel is created
         viewModel.CreateAnimal.Action = this.CreateAnimalHandler;
         viewModel.RemoveAnimal.Action = this.RemoveAnimalHandler;
+        viewModel.CreateAndDrop.Action = this.CreateAndDropHandler;
         viewModel.InitAllAnimal.Action = this.InitAllAnimalHandler;
         viewModel.TestCommand.Action = this.TestCommandHandler;
         viewModel.RefreshSameCount.Action = this.RefreshSameCountHandler;
+        viewModel.CalcAnimalsCount.Action = this.CalcAnimalsCountHandler;
         InGameRootViewModelManager.Add(viewModel);
     }
     
@@ -163,10 +165,16 @@ public class InGameRootControllerBase : uFrame.MVVM.Controller {
         InGameRootViewModelManager.Remove(viewModel);
     }
     
+    public virtual void CreateAndDrop(InGameRootViewModel viewModel) {
+    }
+    
     public virtual void InitAllAnimal(InGameRootViewModel viewModel) {
     }
     
     public virtual void TestCommand(InGameRootViewModel viewModel) {
+    }
+    
+    public virtual void CalcAnimalsCount(InGameRootViewModel viewModel) {
     }
     
     public virtual void CreateAnimalHandler(CreateAnimalCommand command) {
@@ -175,6 +183,10 @@ public class InGameRootControllerBase : uFrame.MVVM.Controller {
     
     public virtual void RemoveAnimalHandler(RemoveAnimalCommand command) {
         this.RemoveAnimal(command.Sender as InGameRootViewModel, command.Argument);
+    }
+    
+    public virtual void CreateAndDropHandler(CreateAndDropCommand command) {
+        this.CreateAndDrop(command.Sender as InGameRootViewModel);
     }
     
     public virtual void InitAllAnimalHandler(InitAllAnimalCommand command) {
@@ -187,6 +199,10 @@ public class InGameRootControllerBase : uFrame.MVVM.Controller {
     
     public virtual void RefreshSameCountHandler(RefreshSameCountCommand command) {
         this.RefreshSameCount(command.Sender as InGameRootViewModel, command.Argument);
+    }
+    
+    public virtual void CalcAnimalsCountHandler(CalcAnimalsCountCommand command) {
+        this.CalcAnimalsCount(command.Sender as InGameRootViewModel);
     }
     
     public virtual void CreateAnimal(InGameRootViewModel viewModel, AnimalProp arg) {
