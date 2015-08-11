@@ -145,9 +145,15 @@ public partial class InGameRootViewModelBase : uFrame.MVVM.ViewModel {
     
     private InGameStateMachine _InGameStateProperty;
     
+    private P<MapInfo> _MapInfoProperty;
+    
+    private P<String> _PropertiesProperty;
+    
     private ModelCollection<AnimalViewModel> _AnimalCollections;
     
     private Signal<CreateAnimalCommand> _CreateAnimal;
+    
+    private Signal<InitAllAnimalCommand> _InitAllAnimal;
     
     public InGameRootViewModelBase(uFrame.Kernel.IEventAggregator aggregator) : 
             base(aggregator) {
@@ -171,6 +177,42 @@ public partial class InGameRootViewModelBase : uFrame.MVVM.ViewModel {
         }
     }
     
+    public virtual P<MapInfo> MapInfoProperty {
+        get {
+            return _MapInfoProperty;
+        }
+        set {
+            _MapInfoProperty = value;
+        }
+    }
+    
+    public virtual P<String> PropertiesProperty {
+        get {
+            return _PropertiesProperty;
+        }
+        set {
+            _PropertiesProperty = value;
+        }
+    }
+    
+    public virtual MapInfo MapInfo {
+        get {
+            return MapInfoProperty.Value;
+        }
+        set {
+            MapInfoProperty.Value = value;
+        }
+    }
+    
+    public virtual String Properties {
+        get {
+            return PropertiesProperty.Value;
+        }
+        set {
+            PropertiesProperty.Value = value;
+        }
+    }
+    
     public virtual ModelCollection<AnimalViewModel> AnimalCollections {
         get {
             return _AnimalCollections;
@@ -189,9 +231,21 @@ public partial class InGameRootViewModelBase : uFrame.MVVM.ViewModel {
         }
     }
     
+    public virtual Signal<InitAllAnimalCommand> InitAllAnimal {
+        get {
+            return _InitAllAnimal;
+        }
+        set {
+            _InitAllAnimal = value;
+        }
+    }
+    
     public override void Bind() {
         base.Bind();
         this.CreateAnimal = new Signal<CreateAnimalCommand>(this);
+        this.InitAllAnimal = new Signal<InitAllAnimalCommand>(this);
+        _MapInfoProperty = new P<MapInfo>(this, "MapInfo");
+        _PropertiesProperty = new P<String>(this, "Properties");
         _AnimalCollections = new ModelCollection<AnimalViewModel>(this, "AnimalCollections");
         _InGameStateProperty = new InGameStateMachine(this, "InGameState");
     }
@@ -214,12 +268,17 @@ public partial class InGameRootViewModelBase : uFrame.MVVM.ViewModel {
     protected override void FillCommands(System.Collections.Generic.List<uFrame.MVVM.ViewModelCommandInfo> list) {
         base.FillCommands(list);
         list.Add(new ViewModelCommandInfo("CreateAnimal", CreateAnimal) { ParameterType = typeof(AnimalProp) });
+        list.Add(new ViewModelCommandInfo("InitAllAnimal", InitAllAnimal) { ParameterType = typeof(void) });
     }
     
     protected override void FillProperties(System.Collections.Generic.List<uFrame.MVVM.ViewModelPropertyInfo> list) {
         base.FillProperties(list);
         // PropertiesChildItem
         list.Add(new ViewModelPropertyInfo(_InGameStateProperty, false, false, false, false));
+        // PropertiesChildItem
+        list.Add(new ViewModelPropertyInfo(_MapInfoProperty, false, false, false, false));
+        // PropertiesChildItem
+        list.Add(new ViewModelPropertyInfo(_PropertiesProperty, false, false, false, false));
         list.Add(new ViewModelPropertyInfo(_AnimalCollections, true, true, false, false));
     }
 }

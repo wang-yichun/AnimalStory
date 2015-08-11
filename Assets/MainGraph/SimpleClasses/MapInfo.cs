@@ -2,13 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using uFrame.IOC;
 using uFrame.Kernel;
 using uFrame.MVVM;
-using UniRx;
-using UnityEngine;
+using uFrame.MVVM.Bindings;
+using uFrame.Serialization;
 
-public class Common : CommonBase
-{
 
+public class MapInfo : MapInfoBase {
 }

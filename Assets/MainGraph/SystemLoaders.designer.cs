@@ -19,6 +19,8 @@ using uFrame.MVVM;
 
 public class InGameSysLoaderBase : uFrame.Kernel.SystemLoader {
     
+    private InGameRootViewModel _InGameRoot;
+    
     private AnimalController _AnimalController;
     
     private InGameRootController _InGameRootController;
@@ -28,6 +30,18 @@ public class InGameSysLoaderBase : uFrame.Kernel.SystemLoader {
     private CoffeeCowAnimalController _CoffeeCowAnimalController;
     
     private GreenFrogAnimalController _GreenFrogAnimalController;
+    
+    [uFrame.IOC.InjectAttribute("InGameRoot")]
+    public virtual InGameRootViewModel InGameRoot {
+        get {
+            if (this._InGameRoot == null) {
+                this._InGameRoot = this.CreateViewModel<InGameRootViewModel>( "InGameRoot");
+            }
+            return _InGameRoot;
+        }
+        set {
+        }
+    }
     
     [uFrame.IOC.InjectAttribute()]
     public virtual AnimalController AnimalController {
@@ -105,5 +119,6 @@ public class InGameSysLoaderBase : uFrame.Kernel.SystemLoader {
         Container.RegisterController<CoffeeCowAnimalController>(CoffeeCowAnimalController);
         Container.RegisterViewModelManager<GreenFrogAnimalViewModel>(new ViewModelManager<GreenFrogAnimalViewModel>());
         Container.RegisterController<GreenFrogAnimalController>(GreenFrogAnimalController);
+        Container.RegisterViewModel<InGameRootViewModel>(InGameRoot, "InGameRoot");
     }
 }

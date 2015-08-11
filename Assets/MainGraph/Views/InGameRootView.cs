@@ -21,6 +21,14 @@ public class InGameRootView : InGameRootViewBase
 		// NOTE: this method is only invoked if the 'Initialize ViewModel' is checked in the inspector.
 		// var vm = model as InGameRootViewModel;
 		// This method is invoked when applying the data from the inspector to the viewmodel.  Add any view-specific customizations here.
+
+		InGameRootViewModel viewModel = model as InGameRootViewModel;
+		viewModel.MapInfo = new MapInfo (){
+			xmax = 5,
+			xmin = 1,
+			ymax = 3,
+			ymin = 1
+		};
 	}
     
 	public override void Bind ()
@@ -35,39 +43,9 @@ public class InGameRootView : InGameRootViewBase
 	{
 		base.OnReady ();
 
-//		GameObject bb = Instantiate (AnimalsPrefab[0]) as GameObject;
-//		bb.transform.parent = this.MapContainerObj.transform;
-//		var bbvm = bb.GetViewModel<BlueBirdAnimalViewModel> ();
-//		this.InGameRoot.AnimalCollections.Add (bbvm);
-
-//		this.createAnimal ();
-
-//		this.ExecuteCreateAnimal ();
-
-//		Publish (new InitMapContainerCommand () {
-//			InGameRootViewModel = this.InGameRoot
-//		});
-
-		this.ExecuteCreateAnimal (new AnimalProp () {
-			AnimalType = AnimalType.COFFEE_COW,
-			Loc = new Loc() {x = 1, y = 1}
-		});
+//		this.InGameRoot.InitAllAnimal.OnNext (new InitAllAnimalCommand());
+		this.ExecuteInitAllAnimal ();
 	}
-
-//	public void createAnimal ()
-//	{
-//		for (int idx = 0; idx < MapContainerObj.transform.childCount; idx++) {
-//			GameObject containerObj = MapContainerObj.transform.GetChild (idx).gameObject;
-//					
-//			GameObject animalObj = Instantiate (AnimalsPrefab [UnityEngine.Random.Range (0, 3)]) as GameObject;
-//			animalObj.transform.parent = containerObj.transform;
-//			animalObj.transform.localPosition = Vector3.zero;
-//
-//			var avm = animalObj.GetViewModel<AnimalViewModel> ();
-//			avm.Loc = new Loc();
-//			this.InGameRoot.AnimalCollections.Add (avm);
-//		}
-//	}
 
 	public override ViewBase AnimalCollectionsCreateView (ViewModel viewModel)
 	{
@@ -88,9 +66,7 @@ public class InGameRootView : InGameRootViewBase
 			break;
 		}
 
-//		string name = new Locator().Loc2Name (new Loc (){ x = animalVM.Loc.x, y = animalVM.Loc.y });
-		string name = "0101";
-		Debug.Log (name);
+		string name = Locator.Loc2Name (new Loc (){ x = animalVM.Loc.x, y = animalVM.Loc.y });
 
 		GameObject containerObj = MapContainerObj.transform.FindChild (name).gameObject;
 

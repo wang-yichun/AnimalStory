@@ -23,6 +23,8 @@ public class AnimalControllerBase : uFrame.MVVM.Controller {
     
     private uFrame.MVVM.IViewModelManager _AnimalViewModelManager;
     
+    private InGameRootViewModel _InGameRoot;
+    
     [uFrame.IOC.InjectAttribute("Animal")]
     public uFrame.MVVM.IViewModelManager AnimalViewModelManager {
         get {
@@ -30,6 +32,16 @@ public class AnimalControllerBase : uFrame.MVVM.Controller {
         }
         set {
             _AnimalViewModelManager = value;
+        }
+    }
+    
+    [uFrame.IOC.InjectAttribute("InGameRoot")]
+    public InGameRootViewModel InGameRoot {
+        get {
+            return _InGameRoot;
+        }
+        set {
+            _InGameRoot = value;
         }
     }
     
@@ -81,6 +93,8 @@ public class InGameRootControllerBase : uFrame.MVVM.Controller {
     
     private uFrame.MVVM.IViewModelManager _InGameRootViewModelManager;
     
+    private InGameRootViewModel _InGameRoot;
+    
     [uFrame.IOC.InjectAttribute("InGameRoot")]
     public uFrame.MVVM.IViewModelManager InGameRootViewModelManager {
         get {
@@ -88,6 +102,16 @@ public class InGameRootControllerBase : uFrame.MVVM.Controller {
         }
         set {
             _InGameRootViewModelManager = value;
+        }
+    }
+    
+    [uFrame.IOC.InjectAttribute("InGameRoot")]
+    public InGameRootViewModel InGameRoot {
+        get {
+            return _InGameRoot;
+        }
+        set {
+            _InGameRoot = value;
         }
     }
     
@@ -119,6 +143,7 @@ public class InGameRootControllerBase : uFrame.MVVM.Controller {
     public virtual void InitializeInGameRoot(InGameRootViewModel viewModel) {
         // This is called when a InGameRootViewModel is created
         viewModel.CreateAnimal.Action = this.CreateAnimalHandler;
+        viewModel.InitAllAnimal.Action = this.InitAllAnimalHandler;
         InGameRootViewModelManager.Add(viewModel);
     }
     
@@ -127,8 +152,15 @@ public class InGameRootControllerBase : uFrame.MVVM.Controller {
         InGameRootViewModelManager.Remove(viewModel);
     }
     
+    public virtual void InitAllAnimal(InGameRootViewModel viewModel) {
+    }
+    
     public virtual void CreateAnimalHandler(CreateAnimalCommand command) {
         this.CreateAnimal(command.Sender as InGameRootViewModel, command.Argument);
+    }
+    
+    public virtual void InitAllAnimalHandler(InitAllAnimalCommand command) {
+        this.InitAllAnimal(command.Sender as InGameRootViewModel);
     }
     
     public virtual void CreateAnimal(InGameRootViewModel viewModel, AnimalProp arg) {

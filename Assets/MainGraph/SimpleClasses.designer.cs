@@ -95,3 +95,50 @@ public class AnimalPropBase : object {
         }
     }
 }
+
+public class MapInfoBase : object {
+    
+    private Int32 _xmin;
+    
+    private Int32 _xmax;
+    
+    private Int32 _ymin;
+    
+    private Int32 _ymax;
+    
+    public Int32 xmin {
+        get {
+            return _xmin;
+        }
+        set {
+            _xmin = value;
+        }
+    }
+    
+    public Int32 xmax {
+        get {
+            return _xmax;
+        }
+        set {
+            _xmax = value;
+        }
+    }
+    
+    public Int32 ymin {
+        get {
+            return _ymin;
+        }
+        set {
+            _ymin = value;
+        }
+    }
+    
+    public Int32 ymax {
+        get {
+            return _ymax;
+        }
+        set {
+            _ymax = value;
+        }
+    }
+}

@@ -9,15 +9,18 @@ using uFrame.Kernel;
 using uFrame.IOC;
 using UnityEngine;
 
-
-public class InGameRootController : InGameRootControllerBase {
+public class InGameRootController : InGameRootControllerBase
+{
 	
-	[Inject] public Locator Locator;
+	[Inject]
+	public Locator
+		Locator;
 
-    public override void InitializeInGameRoot(InGameRootViewModel viewModel) {
-        base.InitializeInGameRoot(viewModel);
-        // This is called when a InGameRootViewModel is created
-    }
+	public override void InitializeInGameRoot (InGameRootViewModel viewModel)
+	{
+		base.InitializeInGameRoot (viewModel);
+		// This is called when a InGameRootViewModel is created
+	}
 
 	public override void CreateAnimal (InGameRootViewModel viewModel, AnimalProp arg)
 	{
@@ -29,5 +32,25 @@ public class InGameRootController : InGameRootControllerBase {
 		animalVM.Loc = arg.Loc;
 
 		viewModel.AnimalCollections.Add (animalVM);
+	}
+
+	public override void InitAllAnimal (InGameRootViewModel viewModel)
+	{
+		base.InitAllAnimal (viewModel);
+
+		for (int y = viewModel.MapInfo.ymin; y <= viewModel.MapInfo.ymax; y++) {
+			for (int x = viewModel.MapInfo.xmin; x <= viewModel.MapInfo.xmax; x++) {
+
+				viewModel.CreateAnimal.OnNext (new CreateAnimalCommand () {
+					Argument = new AnimalProp () {
+						AnimalType = Locator.RandomGetAnimalType(),
+						Loc = new Loc() {x = x, y = y}
+					}
+				});
+
+			}
+		}
+
+
 	}
 }

@@ -58,14 +58,5 @@ public class CommonBase : uFrame.Kernel.SystemServiceMonoBehavior {
     /// </summary>
     public override void Setup() {
         base.Setup();
-        this.OnEvent<InitMapContainerCommand>().Subscribe(this.InitMapContainerCommandHandler);
-    }
-    
-    /// <summary>
-    // This method is executed when using this.Publish(new InitMapContainerCommand())
-    /// </summary>
-    public virtual void InitMapContainerCommandHandler(InitMapContainerCommand data) {
-        // Process the commands information.  Also, you can publish new events by using the line below.
-        // this.Publish(new AnotherEvent())
     }
 }

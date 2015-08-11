@@ -33,3 +33,6 @@ public partial class CreateAnimalCommand : uFrame.MVVM.ViewModelCommand {
         }
     }
 }
+
+public partial class InitAllAnimalCommand : uFrame.MVVM.ViewModelCommand {
+}

@@ -128,6 +128,16 @@ public class GreenFrogAnimalViewBase : AnimalView {
 
 public class InGameRootViewBase : uFrame.MVVM.ViewBase {
     
+    [UnityEngine.SerializeField()]
+    [UFGroup("View Model Properties")]
+    [UnityEngine.HideInInspector()]
+    public MapInfo _MapInfo;
+    
+    [UnityEngine.SerializeField()]
+    [UFGroup("View Model Properties")]
+    [UnityEngine.HideInInspector()]
+    public String _Properties;
+    
     [UFToggleGroup("InGameState")]
     [UnityEngine.HideInInspector()]
     public bool _BindInGameState = true;
@@ -156,7 +166,7 @@ public class InGameRootViewBase : uFrame.MVVM.ViewBase {
     
     public override string DefaultIdentifier {
         get {
-            return base.DefaultIdentifier;
+            return "InGameRoot";
         }
     }
     
@@ -178,6 +188,8 @@ public class InGameRootViewBase : uFrame.MVVM.ViewBase {
         // var vm = model as InGameRootViewModel;
         // This method is invoked when applying the data from the inspector to the viewmodel.  Add any view-specific customizations here.
         var ingamerootview = ((InGameRootViewModel)model);
+        ingamerootview.MapInfo = this._MapInfo;
+        ingamerootview.Properties = this._Properties;
     }
     
     public override void Bind() {
@@ -224,9 +236,18 @@ public class InGameRootViewBase : uFrame.MVVM.ViewBase {
     public virtual void AnimalCollectionsRemoved(uFrame.MVVM.ViewBase view) {
     }
     
+    public virtual void ExecuteInitAllAnimal() {
+        InGameRoot.InitAllAnimal.OnNext(new InitAllAnimalCommand() { Sender = InGameRoot });
+    }
+    
     public virtual void ExecuteCreateAnimal(CreateAnimalCommand command) {
         command.Sender = InGameRoot;
         InGameRoot.CreateAnimal.OnNext(command);
+    }
+    
+    public virtual void ExecuteInitAllAnimal(InitAllAnimalCommand command) {
+        command.Sender = InGameRoot;
+        InGameRoot.InitAllAnimal.OnNext(command);
     }
     
     public virtual void ExecuteCreateAnimal(AnimalProp arg) {
