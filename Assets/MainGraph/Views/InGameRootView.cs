@@ -29,6 +29,10 @@ public class InGameRootView : InGameRootViewBase
 			ymax = 3,
 			ymin = 1
 		};
+
+		viewModel.RuleInfo = new RuleInfo () {
+			DestroyLimitCount = 3
+		};
 	}
     
 	public override void Bind ()
@@ -73,7 +77,12 @@ public class InGameRootView : InGameRootViewBase
 		ViewBase animalV = InstantiateView (prefabSelected, viewModel);
 		animalV.gameObject.transform.position = containerObj.transform.localPosition;
 
-//		return animalV;  // err parent!!
 		return animalV;
+	}
+
+	public override void AnimalCollectionsRemoved (ViewBase view)
+	{
+		base.AnimalCollectionsRemoved (view);
+		Destroy (view.gameObject);
 	}
 }

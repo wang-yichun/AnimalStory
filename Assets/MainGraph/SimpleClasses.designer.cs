@@ -142,3 +142,17 @@ public class MapInfoBase : object {
         }
     }
 }
+
+public class RuleInfoBase : object {
+    
+    private Int32 _DestroyLimitCount;
+    
+    public Int32 DestroyLimitCount {
+        get {
+            return _DestroyLimitCount;
+        }
+        set {
+            _DestroyLimitCount = value;
+        }
+    }
+}

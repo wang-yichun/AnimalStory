@@ -735,6 +735,52 @@ Transform:
   m_Children: []
   m_Father: {fileID: 750981504}
   m_RootOrder: 4
+--- !u!1001 &1585776657
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1772491851}
+    m_Modifications:
+    - target: {fileID: 480042, guid: b4c20541234d94651858d4095235ef4a, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 480042, guid: b4c20541234d94651858d4095235ef4a, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 480042, guid: b4c20541234d94651858d4095235ef4a, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 480042, guid: b4c20541234d94651858d4095235ef4a, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 480042, guid: b4c20541234d94651858d4095235ef4a, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 480042, guid: b4c20541234d94651858d4095235ef4a, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 480042, guid: b4c20541234d94651858d4095235ef4a, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 480042, guid: b4c20541234d94651858d4095235ef4a, type: 2}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: b4c20541234d94651858d4095235ef4a, type: 2}
+  m_IsPrefabParent: 0
+--- !u!4 &1585776658 stripped
+Transform:
+  m_PrefabParentObject: {fileID: 480042, guid: b4c20541234d94651858d4095235ef4a, type: 2}
+  m_PrefabInternal: {fileID: 1585776657}
 --- !u!1 &1622323082
 GameObject:
   m_ObjectHideFlags: 0
@@ -814,7 +860,8 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 1585776658}
   m_Father: {fileID: 500163607}
   m_RootOrder: 3
 --- !u!114 &1772491852
@@ -838,10 +885,6 @@ MonoBehaviour:
   _BindAnimalCollections: 1
   _AnimalCollectionsParent: {fileID: 969452821}
   _AnimalCollectionsViewFirst: 0
-  xmin: 0
-  xmax: 0
-  ymin: 0
-  ymax: 0
   MapContainerObj: {fileID: 750981503}
   AnimalsPrefab:
   - {fileID: 132268, guid: b4c20541234d94651858d4095235ef4a, type: 2}

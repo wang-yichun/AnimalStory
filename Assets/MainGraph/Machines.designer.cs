@@ -206,3 +206,195 @@ public class Stop : Invert.StateMachine.State {
         this.Transition(this.PrepareNewGame);
     }
 }
+
+public class AnimalState : Invert.StateMachine.StateMachine {
+    
+    private Invert.StateMachine.StateMachineTrigger _Destroy;
+    
+    private Invert.StateMachine.StateMachineTrigger _Drop;
+    
+    private Invert.StateMachine.StateMachineTrigger _DropStop;
+    
+    private Idle _Idle;
+    
+    private Destroying _Destroying;
+    
+    private Dropping _Dropping;
+    
+    public AnimalState(uFrame.MVVM.ViewModel vm, string propertyName) : 
+            base(vm, propertyName) {
+    }
+    
+    public AnimalState() : 
+            base(null, string.Empty) {
+    }
+    
+    public override Invert.StateMachine.State StartState {
+        get {
+            return this.Idle;
+        }
+    }
+    
+    public virtual Invert.StateMachine.StateMachineTrigger Destroy {
+        get {
+            if (this._Destroy == null) {
+                this._Destroy = new StateMachineTrigger(this , "Destroy");
+            }
+            return _Destroy;
+        }
+        set {
+            _Destroy = value;
+        }
+    }
+    
+    public virtual Invert.StateMachine.StateMachineTrigger Drop {
+        get {
+            if (this._Drop == null) {
+                this._Drop = new StateMachineTrigger(this , "Drop");
+            }
+            return _Drop;
+        }
+        set {
+            _Drop = value;
+        }
+    }
+    
+    public virtual Invert.StateMachine.StateMachineTrigger DropStop {
+        get {
+            if (this._DropStop == null) {
+                this._DropStop = new StateMachineTrigger(this , "DropStop");
+            }
+            return _DropStop;
+        }
+        set {
+            _DropStop = value;
+        }
+    }
+    
+    public virtual Idle Idle {
+        get {
+            if (this._Idle == null) {
+                this._Idle = new Idle();
+            }
+            return _Idle;
+        }
+        set {
+            _Idle = value;
+        }
+    }
+    
+    public virtual Destroying Destroying {
+        get {
+            if (this._Destroying == null) {
+                this._Destroying = new Destroying();
+            }
+            return _Destroying;
+        }
+        set {
+            _Destroying = value;
+        }
+    }
+    
+    public virtual Dropping Dropping {
+        get {
+            if (this._Dropping == null) {
+                this._Dropping = new Dropping();
+            }
+            return _Dropping;
+        }
+        set {
+            _Dropping = value;
+        }
+    }
+    
+    public override void Compose(System.Collections.Generic.List<Invert.StateMachine.State> states) {
+        base.Compose(states);
+        Idle.Destroy = new StateTransition("Destroy", Idle, Destroying);
+        Transitions.Add(Idle.Destroy);
+        Idle.Drop = new StateTransition("Drop", Idle, Dropping);
+        Transitions.Add(Idle.Drop);
+        Idle.AddTrigger(Destroy, Idle.Destroy);
+        Idle.AddTrigger(Drop, Idle.Drop);
+        Idle.StateMachine = this;
+        states.Add(Idle);
+        Destroying.StateMachine = this;
+        states.Add(Destroying);
+        Dropping.DropStop = new StateTransition("DropStop", Dropping, Idle);
+        Transitions.Add(Dropping.DropStop);
+        Dropping.AddTrigger(DropStop, Dropping.DropStop);
+        Dropping.StateMachine = this;
+        states.Add(Dropping);
+    }
+}
+
+public class Idle : Invert.StateMachine.State {
+    
+    private Invert.StateMachine.StateTransition _Destroy;
+    
+    private Invert.StateMachine.StateTransition _Drop;
+    
+    public Invert.StateMachine.StateTransition Destroy {
+        get {
+            return _Destroy;
+        }
+        set {
+            _Destroy = value;
+        }
+    }
+    
+    public Invert.StateMachine.StateTransition Drop {
+        get {
+            return _Drop;
+        }
+        set {
+            _Drop = value;
+        }
+    }
+    
+    public override string Name {
+        get {
+            return "Idle";
+        }
+    }
+    
+    public virtual void DestroyTransition() {
+        this.Transition(this.Destroy);
+    }
+    
+    public virtual void DropTransition() {
+        this.Transition(this.Drop);
+    }
+}
+
+public class Destroying : Invert.StateMachine.State {
+    
+    public override string Name {
+        get {
+            return "Destroying";
+        }
+    }
+}
+
+public class Dropping : Invert.StateMachine.State {
+    
+    private Invert.StateMachine.StateTransition _DropStop;
+    
+    public Invert.StateMachine.StateTransition DropStop {
+        get {
+            return _DropStop;
+        }
+        set {
+            _DropStop = value;
+        }
+    }
+    
+    public override string Name {
+        get {
+            return "Dropping";
+        }
+    }
+    
+    public virtual void DropStopTransition() {
+        this.Transition(this.DropStop);
+    }
+}

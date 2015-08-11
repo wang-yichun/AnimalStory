@@ -136,7 +136,7 @@ public class InGameRootViewBase : uFrame.MVVM.ViewBase {
     [UnityEngine.SerializeField()]
     [UFGroup("View Model Properties")]
     [UnityEngine.HideInInspector()]
-    public String _Properties;
+    public RuleInfo _RuleInfo;
     
     [UFToggleGroup("InGameState")]
     [UnityEngine.HideInInspector()]
@@ -189,7 +189,7 @@ public class InGameRootViewBase : uFrame.MVVM.ViewBase {
         // This method is invoked when applying the data from the inspector to the viewmodel.  Add any view-specific customizations here.
         var ingamerootview = ((InGameRootViewModel)model);
         ingamerootview.MapInfo = this._MapInfo;
-        ingamerootview.Properties = this._Properties;
+        ingamerootview.RuleInfo = this._RuleInfo;
     }
     
     public override void Bind() {
@@ -240,9 +240,18 @@ public class InGameRootViewBase : uFrame.MVVM.ViewBase {
         InGameRoot.InitAllAnimal.OnNext(new InitAllAnimalCommand() { Sender = InGameRoot });
     }
     
+    public virtual void ExecuteTestCommand() {
+        InGameRoot.TestCommand.OnNext(new TestCommandCommand() { Sender = InGameRoot });
+    }
+    
     public virtual void ExecuteCreateAnimal(CreateAnimalCommand command) {
         command.Sender = InGameRoot;
         InGameRoot.CreateAnimal.OnNext(command);
+    }
+    
+    public virtual void ExecuteRemoveAnimal(RemoveAnimalCommand command) {
+        command.Sender = InGameRoot;
+        InGameRoot.RemoveAnimal.OnNext(command);
     }
     
     public virtual void ExecuteInitAllAnimal(InitAllAnimalCommand command) {
@@ -250,8 +259,26 @@ public class InGameRootViewBase : uFrame.MVVM.ViewBase {
         InGameRoot.InitAllAnimal.OnNext(command);
     }
     
+    public virtual void ExecuteTestCommand(TestCommandCommand command) {
+        command.Sender = InGameRoot;
+        InGameRoot.TestCommand.OnNext(command);
+    }
+    
+    public virtual void ExecuteRefreshSameCount(RefreshSameCountCommand command) {
+        command.Sender = InGameRoot;
+        InGameRoot.RefreshSameCount.OnNext(command);
+    }
+    
     public virtual void ExecuteCreateAnimal(AnimalProp arg) {
         InGameRoot.CreateAnimal.OnNext(new CreateAnimalCommand() { Sender = InGameRoot, Argument = arg });
+    }
+    
+    public virtual void ExecuteRemoveAnimal(AnimalProp arg) {
+        InGameRoot.RemoveAnimal.OnNext(new RemoveAnimalCommand() { Sender = InGameRoot, Argument = arg });
+    }
+    
+    public virtual void ExecuteRefreshSameCount(AnimalViewModel arg) {
+        InGameRoot.RefreshSameCount.OnNext(new RefreshSameCountCommand() { Sender = InGameRoot, Argument = arg });
     }
 }
 
@@ -265,12 +292,42 @@ public class AnimalViewBase : uFrame.MVVM.ViewBase {
     [UnityEngine.SerializeField()]
     [UFGroup("View Model Properties")]
     [UnityEngine.HideInInspector()]
-    public Int32 _sameCount;
+    public Int32 _SameCount;
     
     [UnityEngine.SerializeField()]
     [UFGroup("View Model Properties")]
     [UnityEngine.HideInInspector()]
     public Loc _Loc;
+    
+    [UnityEngine.SerializeField()]
+    [UFGroup("View Model Properties")]
+    [UnityEngine.HideInInspector()]
+    public Boolean _needDestroy;
+    
+    [UnityEngine.SerializeField()]
+    [UFGroup("View Model Properties")]
+    [UnityEngine.HideInInspector()]
+    public Boolean _needDrop;
+    
+    [UFToggleGroup("SameCount")]
+    [UnityEngine.HideInInspector()]
+    public bool _BindSameCount = true;
+    
+    [UFGroup("SameCount")]
+    [UnityEngine.SerializeField()]
+    [UnityEngine.HideInInspector()]
+    [UnityEngine.Serialization.FormerlySerializedAsAttribute("_SameCountonlyWhenChanged")]
+    protected bool _SameCountOnlyWhenChanged;
+    
+    [UFToggleGroup("AnimalState")]
+    [UnityEngine.HideInInspector()]
+    public bool _BindAnimalState = true;
+    
+    [UFGroup("AnimalState")]
+    [UnityEngine.SerializeField()]
+    [UnityEngine.HideInInspector()]
+    [UnityEngine.Serialization.FormerlySerializedAsAttribute("_AnimalStateonlyWhenChanged")]
+    protected bool _AnimalStateOnlyWhenChanged;
     
     public override string DefaultIdentifier {
         get {
@@ -297,8 +354,10 @@ public class AnimalViewBase : uFrame.MVVM.ViewBase {
         // This method is invoked when applying the data from the inspector to the viewmodel.  Add any view-specific customizations here.
         var animalview = ((AnimalViewModel)model);
         animalview.AnimalType = this._AnimalType;
-        animalview.sameCount = this._sameCount;
+        animalview.SameCount = this._SameCount;
         animalview.Loc = this._Loc;
+        animalview.needDestroy = this._needDestroy;
+        animalview.needDrop = this._needDrop;
     }
     
     public override void Bind() {
@@ -306,14 +365,53 @@ public class AnimalViewBase : uFrame.MVVM.ViewBase {
         // Use this.Animal to access the viewmodel.
         // Use this method to subscribe to the view-model.
         // Any designer bindings are created in the base implementation.
+        if (_BindSameCount) {
+            this.BindProperty(this.Animal.SameCountProperty, this.SameCountChanged, _SameCountOnlyWhenChanged);
+        }
+        if (_BindAnimalState) {
+            this.BindStateProperty(this.Animal.AnimalStateProperty, this.AnimalStateChanged, _AnimalStateOnlyWhenChanged);
+        }
+    }
+    
+    public virtual void SameCountChanged(Int32 arg1) {
+    }
+    
+    public virtual void AnimalStateChanged(Invert.StateMachine.State arg1) {
+        if (arg1 is Idle) {
+            this.OnIdle();
+        }
+        if (arg1 is Destroying) {
+            this.OnDestroying();
+        }
+        if (arg1 is Dropping) {
+            this.OnDropping();
+        }
+    }
+    
+    public virtual void OnIdle() {
+    }
+    
+    public virtual void OnDestroying() {
+    }
+    
+    public virtual void OnDropping() {
     }
     
     public virtual void ExecuteTapped() {
         Animal.Tapped.OnNext(new TappedCommand() { Sender = Animal });
     }
     
+    public virtual void ExecuteDestroySelf() {
+        Animal.DestroySelf.OnNext(new DestroySelfCommand() { Sender = Animal });
+    }
+    
     public virtual void ExecuteTapped(TappedCommand command) {
         command.Sender = Animal;
         Animal.Tapped.OnNext(command);
+    }
+    
+    public virtual void ExecuteDestroySelf(DestroySelfCommand command) {
+        command.Sender = Animal;
+        Animal.DestroySelf.OnNext(command);
     }
 }

@@ -46,4 +46,42 @@ public class AnimalView : AnimalViewBase
 	{
 		this.ExecuteTapped ();
 	}
+
+	public override void SameCountChanged (Int32 arg1)
+	{
+		gameObject.transform.FindChild ("Text").GetComponent<TextMesh> ().text = arg1.ToString ();
+	}
+
+//    public override void AnimalStateChanged(Invert.StateMachine.State arg1) {
+//		Debug.Log ("AnimalStateChanged");
+//		if (arg1 is Destroying) {
+//			this.ExecuteDestroySelf();
+//		}
+//    }
+
+//	public override void OnDestroying ()
+//	{
+//		base.OnDestroying ();
+//		this.ExecuteDestroySelf ();
+//	}
+
+//    public override void AnimalStateChanged(Invert.StateMachine.State State) {
+//    }
+
+	public override void AnimalStateChanged (Invert.StateMachine.State arg1)
+	{
+		base.AnimalStateChanged (arg1);
+	}
+	 
+	public override void OnDestroying ()
+	{
+		base.OnDestroying ();
+		gameObject.GetComponent<Animator> ().SetBool ("Disappear", true);
+//		this.ExecuteDestroySelf();
+	}
+
+	public void DestroyingEnd ()
+	{
+		this.ExecuteDestroySelf ();
+	}
 }

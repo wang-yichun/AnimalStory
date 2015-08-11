@@ -23,16 +23,81 @@ using UniRx;
 
 public partial class AnimalViewModelBase : uFrame.MVVM.ViewModel {
     
+    private System.IDisposable _ShouldDestroyDisposable;
+    
+    private System.IDisposable _ShouldDropDisposable;
+    
+    private System.IDisposable _ShouldNotDropDisposable;
+    
+    private AnimalState _AnimalStateProperty;
+    
+    private P<Boolean> _ShouldDestroyProperty;
+    
+    private P<Boolean> _ShouldDropProperty;
+    
+    private P<Boolean> _ShouldNotDropProperty;
+    
     private P<AnimalType> _AnimalTypeProperty;
     
-    private P<Int32> _sameCountProperty;
+    private P<Int32> _SameCountProperty;
     
     private P<Loc> _LocProperty;
     
+    private P<Boolean> _needDestroyProperty;
+    
+    private P<Boolean> _needDropProperty;
+    
     private Signal<TappedCommand> _Tapped;
+    
+    private Signal<DestroySelfCommand> _DestroySelf;
     
     public AnimalViewModelBase(uFrame.Kernel.IEventAggregator aggregator) : 
             base(aggregator) {
+    }
+    
+    public virtual AnimalState AnimalStateProperty {
+        get {
+            return _AnimalStateProperty;
+        }
+        set {
+            _AnimalStateProperty = value;
+        }
+    }
+    
+    public virtual Invert.StateMachine.State AnimalState {
+        get {
+            return AnimalStateProperty.Value;
+        }
+        set {
+            AnimalStateProperty.Value = value;
+        }
+    }
+    
+    public virtual P<Boolean> ShouldDestroyProperty {
+        get {
+            return _ShouldDestroyProperty;
+        }
+        set {
+            _ShouldDestroyProperty = value;
+        }
+    }
+    
+    public virtual P<Boolean> ShouldDropProperty {
+        get {
+            return _ShouldDropProperty;
+        }
+        set {
+            _ShouldDropProperty = value;
+        }
+    }
+    
+    public virtual P<Boolean> ShouldNotDropProperty {
+        get {
+            return _ShouldNotDropProperty;
+        }
+        set {
+            _ShouldNotDropProperty = value;
+        }
     }
     
     public virtual P<AnimalType> AnimalTypeProperty {
@@ -44,12 +109,12 @@ public partial class AnimalViewModelBase : uFrame.MVVM.ViewModel {
         }
     }
     
-    public virtual P<Int32> sameCountProperty {
+    public virtual P<Int32> SameCountProperty {
         get {
-            return _sameCountProperty;
+            return _SameCountProperty;
         }
         set {
-            _sameCountProperty = value;
+            _SameCountProperty = value;
         }
     }
     
@@ -62,6 +127,51 @@ public partial class AnimalViewModelBase : uFrame.MVVM.ViewModel {
         }
     }
     
+    public virtual P<Boolean> needDestroyProperty {
+        get {
+            return _needDestroyProperty;
+        }
+        set {
+            _needDestroyProperty = value;
+        }
+    }
+    
+    public virtual P<Boolean> needDropProperty {
+        get {
+            return _needDropProperty;
+        }
+        set {
+            _needDropProperty = value;
+        }
+    }
+    
+    public virtual Boolean ShouldDestroy {
+        get {
+            return ShouldDestroyProperty.Value;
+        }
+        set {
+            ShouldDestroyProperty.Value = value;
+        }
+    }
+    
+    public virtual Boolean ShouldDrop {
+        get {
+            return ShouldDropProperty.Value;
+        }
+        set {
+            ShouldDropProperty.Value = value;
+        }
+    }
+    
+    public virtual Boolean ShouldNotDrop {
+        get {
+            return ShouldNotDropProperty.Value;
+        }
+        set {
+            ShouldNotDropProperty.Value = value;
+        }
+    }
+    
     public virtual AnimalType AnimalType {
         get {
             return AnimalTypeProperty.Value;
@@ -71,12 +181,12 @@ public partial class AnimalViewModelBase : uFrame.MVVM.ViewModel {
         }
     }
     
-    public virtual Int32 sameCount {
+    public virtual Int32 SameCount {
         get {
-            return sameCountProperty.Value;
+            return SameCountProperty.Value;
         }
         set {
-            sameCountProperty.Value = value;
+            SameCountProperty.Value = value;
         }
     }
     
@@ -89,6 +199,24 @@ public partial class AnimalViewModelBase : uFrame.MVVM.ViewModel {
         }
     }
     
+    public virtual Boolean needDestroy {
+        get {
+            return needDestroyProperty.Value;
+        }
+        set {
+            needDestroyProperty.Value = value;
+        }
+    }
+    
+    public virtual Boolean needDrop {
+        get {
+            return needDropProperty.Value;
+        }
+        set {
+            needDropProperty.Value = value;
+        }
+    }
+    
     public virtual Signal<TappedCommand> Tapped {
         get {
             return _Tapped;
@@ -98,39 +226,128 @@ public partial class AnimalViewModelBase : uFrame.MVVM.ViewModel {
         }
     }
     
+    public virtual Signal<DestroySelfCommand> DestroySelf {
+        get {
+            return _DestroySelf;
+        }
+        set {
+            _DestroySelf = value;
+        }
+    }
+    
     public override void Bind() {
         base.Bind();
         this.Tapped = new Signal<TappedCommand>(this);
+        this.DestroySelf = new Signal<DestroySelfCommand>(this);
+        _ShouldDestroyProperty = new P<Boolean>(this, "ShouldDestroy");
+        _ShouldDropProperty = new P<Boolean>(this, "ShouldDrop");
+        _ShouldNotDropProperty = new P<Boolean>(this, "ShouldNotDrop");
         _AnimalTypeProperty = new P<AnimalType>(this, "AnimalType");
-        _sameCountProperty = new P<Int32>(this, "sameCount");
+        _SameCountProperty = new P<Int32>(this, "SameCount");
         _LocProperty = new P<Loc>(this, "Loc");
+        _needDestroyProperty = new P<Boolean>(this, "needDestroy");
+        _needDropProperty = new P<Boolean>(this, "needDrop");
+        _AnimalStateProperty = new AnimalState(this, "AnimalState");
+        ResetShouldDestroy();
+        ResetShouldDrop();
+        ResetShouldNotDrop();
+        AnimalStateProperty.Destroy.AddComputer(ShouldDestroyProperty);
+        AnimalStateProperty.Drop.AddComputer(ShouldDropProperty);
+        AnimalStateProperty.DropStop.AddComputer(ShouldNotDropProperty);
     }
     
     public override void Read(ISerializerStream stream) {
         base.Read(stream);
         this.AnimalType = (AnimalType)stream.DeserializeInt("AnimalType");;
-        this.sameCount = stream.DeserializeInt("sameCount");;
+        this.SameCount = stream.DeserializeInt("SameCount");;
+        this.needDestroy = stream.DeserializeBool("needDestroy");;
+        this.needDrop = stream.DeserializeBool("needDrop");;
+        this._AnimalStateProperty.SetState(stream.DeserializeString("AnimalState"));
     }
     
     public override void Write(ISerializerStream stream) {
         base.Write(stream);
         stream.SerializeInt("AnimalType", (int)this.AnimalType);;
-        stream.SerializeInt("sameCount", this.sameCount);
+        stream.SerializeInt("SameCount", this.SameCount);
+        stream.SerializeBool("needDestroy", this.needDestroy);
+        stream.SerializeBool("needDrop", this.needDrop);
+        stream.SerializeString("AnimalState", this.AnimalState.Name);;
     }
     
     protected override void FillCommands(System.Collections.Generic.List<uFrame.MVVM.ViewModelCommandInfo> list) {
         base.FillCommands(list);
         list.Add(new ViewModelCommandInfo("Tapped", Tapped) { ParameterType = typeof(void) });
+        list.Add(new ViewModelCommandInfo("DestroySelf", DestroySelf) { ParameterType = typeof(void) });
     }
     
     protected override void FillProperties(System.Collections.Generic.List<uFrame.MVVM.ViewModelPropertyInfo> list) {
         base.FillProperties(list);
+        // ComputedPropertyNode
+        list.Add(new ViewModelPropertyInfo(_ShouldDestroyProperty, false, false, false, true));
+        // ComputedPropertyNode
+        list.Add(new ViewModelPropertyInfo(_ShouldDropProperty, false, false, false, true));
+        // ComputedPropertyNode
+        list.Add(new ViewModelPropertyInfo(_ShouldNotDropProperty, false, false, false, true));
         // PropertiesChildItem
         list.Add(new ViewModelPropertyInfo(_AnimalTypeProperty, false, false, true, false));
         // PropertiesChildItem
-        list.Add(new ViewModelPropertyInfo(_sameCountProperty, false, false, false, false));
+        list.Add(new ViewModelPropertyInfo(_SameCountProperty, false, false, false, false));
         // PropertiesChildItem
         list.Add(new ViewModelPropertyInfo(_LocProperty, false, false, false, false));
+        // PropertiesChildItem
+        list.Add(new ViewModelPropertyInfo(_needDestroyProperty, false, false, false, false));
+        // PropertiesChildItem
+        list.Add(new ViewModelPropertyInfo(_needDropProperty, false, false, false, false));
+        // PropertiesChildItem
+        list.Add(new ViewModelPropertyInfo(_AnimalStateProperty, false, false, false, false));
+    }
+    
+    public virtual System.Collections.Generic.IEnumerable<uFrame.MVVM.IObservableProperty> GetShouldDestroyDependents() {
+        yield return needDestroyProperty;
+        yield break;
+    }
+    
+    public virtual System.Collections.Generic.IEnumerable<uFrame.MVVM.IObservableProperty> GetShouldDropDependents() {
+        yield return needDropProperty;
+        yield break;
+    }
+    
+    public virtual System.Collections.Generic.IEnumerable<uFrame.MVVM.IObservableProperty> GetShouldNotDropDependents() {
+        yield return _ShouldDropProperty;
+        yield break;
+    }
+    
+    public virtual void ResetShouldDestroy() {
+        if (_ShouldDestroyDisposable != null) {
+            _ShouldDestroyDisposable.Dispose();
+        }
+        _ShouldDestroyDisposable = _ShouldDestroyProperty.ToComputed(ComputeShouldDestroy, this.GetShouldDestroyDependents().ToArray()).DisposeWith(this);
+    }
+    
+    public virtual void ResetShouldDrop() {
+        if (_ShouldDropDisposable != null) {
+            _ShouldDropDisposable.Dispose();
+        }
+        _ShouldDropDisposable = _ShouldDropProperty.ToComputed(ComputeShouldDrop, this.GetShouldDropDependents().ToArray()).DisposeWith(this);
+    }
+    
+    public virtual void ResetShouldNotDrop() {
+        if (_ShouldNotDropDisposable != null) {
+            _ShouldNotDropDisposable.Dispose();
+        }
+        _ShouldNotDropDisposable = _ShouldNotDropProperty.ToComputed(ComputeShouldNotDrop, this.GetShouldNotDropDependents().ToArray()).DisposeWith(this);
+    }
+    
+    public virtual Boolean ComputeShouldDestroy() {
+        return default(Boolean);
+    }
+    
+    public virtual Boolean ComputeShouldDrop() {
+        return default(Boolean);
+    }
+    
+    public virtual Boolean ComputeShouldNotDrop() {
+        return default(Boolean);
     }
 }
 
@@ -147,13 +364,19 @@ public partial class InGameRootViewModelBase : uFrame.MVVM.ViewModel {
     
     private P<MapInfo> _MapInfoProperty;
     
-    private P<String> _PropertiesProperty;
+    private P<RuleInfo> _RuleInfoProperty;
     
     private ModelCollection<AnimalViewModel> _AnimalCollections;
     
     private Signal<CreateAnimalCommand> _CreateAnimal;
     
+    private Signal<RemoveAnimalCommand> _RemoveAnimal;
+    
     private Signal<InitAllAnimalCommand> _InitAllAnimal;
+    
+    private Signal<TestCommandCommand> _TestCommand;
+    
+    private Signal<RefreshSameCountCommand> _RefreshSameCount;
     
     public InGameRootViewModelBase(uFrame.Kernel.IEventAggregator aggregator) : 
             base(aggregator) {
@@ -186,12 +409,12 @@ public partial class InGameRootViewModelBase : uFrame.MVVM.ViewModel {
         }
     }
     
-    public virtual P<String> PropertiesProperty {
+    public virtual P<RuleInfo> RuleInfoProperty {
         get {
-            return _PropertiesProperty;
+            return _RuleInfoProperty;
         }
         set {
-            _PropertiesProperty = value;
+            _RuleInfoProperty = value;
         }
     }
     
@@ -204,12 +427,12 @@ public partial class InGameRootViewModelBase : uFrame.MVVM.ViewModel {
         }
     }
     
-    public virtual String Properties {
+    public virtual RuleInfo RuleInfo {
         get {
-            return PropertiesProperty.Value;
+            return RuleInfoProperty.Value;
         }
         set {
-            PropertiesProperty.Value = value;
+            RuleInfoProperty.Value = value;
         }
     }
     
@@ -231,6 +454,15 @@ public partial class InGameRootViewModelBase : uFrame.MVVM.ViewModel {
         }
     }
     
+    public virtual Signal<RemoveAnimalCommand> RemoveAnimal {
+        get {
+            return _RemoveAnimal;
+        }
+        set {
+            _RemoveAnimal = value;
+        }
+    }
+    
     public virtual Signal<InitAllAnimalCommand> InitAllAnimal {
         get {
             return _InitAllAnimal;
@@ -240,12 +472,33 @@ public partial class InGameRootViewModelBase : uFrame.MVVM.ViewModel {
         }
     }
     
+    public virtual Signal<TestCommandCommand> TestCommand {
+        get {
+            return _TestCommand;
+        }
+        set {
+            _TestCommand = value;
+        }
+    }
+    
+    public virtual Signal<RefreshSameCountCommand> RefreshSameCount {
+        get {
+            return _RefreshSameCount;
+        }
+        set {
+            _RefreshSameCount = value;
+        }
+    }
+    
     public override void Bind() {
         base.Bind();
         this.CreateAnimal = new Signal<CreateAnimalCommand>(this);
+        this.RemoveAnimal = new Signal<RemoveAnimalCommand>(this);
         this.InitAllAnimal = new Signal<InitAllAnimalCommand>(this);
+        this.TestCommand = new Signal<TestCommandCommand>(this);
+        this.RefreshSameCount = new Signal<RefreshSameCountCommand>(this);
         _MapInfoProperty = new P<MapInfo>(this, "MapInfo");
-        _PropertiesProperty = new P<String>(this, "Properties");
+        _RuleInfoProperty = new P<RuleInfo>(this, "RuleInfo");
         _AnimalCollections = new ModelCollection<AnimalViewModel>(this, "AnimalCollections");
         _InGameStateProperty = new InGameStateMachine(this, "InGameState");
     }
@@ -268,7 +521,10 @@ public partial class InGameRootViewModelBase : uFrame.MVVM.ViewModel {
     protected override void FillCommands(System.Collections.Generic.List<uFrame.MVVM.ViewModelCommandInfo> list) {
         base.FillCommands(list);
         list.Add(new ViewModelCommandInfo("CreateAnimal", CreateAnimal) { ParameterType = typeof(AnimalProp) });
+        list.Add(new ViewModelCommandInfo("RemoveAnimal", RemoveAnimal) { ParameterType = typeof(AnimalProp) });
         list.Add(new ViewModelCommandInfo("InitAllAnimal", InitAllAnimal) { ParameterType = typeof(void) });
+        list.Add(new ViewModelCommandInfo("TestCommand", TestCommand) { ParameterType = typeof(void) });
+        list.Add(new ViewModelCommandInfo("RefreshSameCount", RefreshSameCount) { ParameterType = typeof(AnimalViewModel) });
     }
     
     protected override void FillProperties(System.Collections.Generic.List<uFrame.MVVM.ViewModelPropertyInfo> list) {
@@ -278,7 +534,7 @@ public partial class InGameRootViewModelBase : uFrame.MVVM.ViewModel {
         // PropertiesChildItem
         list.Add(new ViewModelPropertyInfo(_MapInfoProperty, false, false, false, false));
         // PropertiesChildItem
-        list.Add(new ViewModelPropertyInfo(_PropertiesProperty, false, false, false, false));
+        list.Add(new ViewModelPropertyInfo(_RuleInfoProperty, false, false, false, false));
         list.Add(new ViewModelPropertyInfo(_AnimalCollections, true, true, false, false));
     }
 }

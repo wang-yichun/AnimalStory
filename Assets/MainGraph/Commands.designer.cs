@@ -20,6 +20,9 @@ using uFrame.Serialization;
 public partial class TappedCommand : uFrame.MVVM.ViewModelCommand {
 }
 
+public partial class DestroySelfCommand : uFrame.MVVM.ViewModelCommand {
+}
+
 public partial class CreateAnimalCommand : uFrame.MVVM.ViewModelCommand {
     
     private AnimalProp _Argument;
@@ -34,5 +37,36 @@ public partial class CreateAnimalCommand : uFrame.MVVM.ViewModelCommand {
     }
 }
 
+public partial class RemoveAnimalCommand : uFrame.MVVM.ViewModelCommand {
+    
+    private AnimalProp _Argument;
+    
+    public AnimalProp Argument {
+        get {
+            return _Argument;
+        }
+        set {
+            _Argument = value;
+        }
+    }
+}
+
 public partial class InitAllAnimalCommand : uFrame.MVVM.ViewModelCommand {
+}
+
+public partial class TestCommandCommand : uFrame.MVVM.ViewModelCommand {
+}
+
+public partial class RefreshSameCountCommand : uFrame.MVVM.ViewModelCommand {
+    
+    private AnimalViewModel _Argument;
+    
+    public AnimalViewModel Argument {
+        get {
+            return _Argument;
+        }
+        set {
+            _Argument = value;
+        }
+    }
 }

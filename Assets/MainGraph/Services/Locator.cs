@@ -28,6 +28,24 @@ public class Locator : LocatorBase
 		return null;
 	}
 
+	public static List<Loc> AroundLoc (Loc loc) {
+		List<Loc> list = new List<Loc> ();
+		List<Loc> preList = new List<Loc> (new Loc[]{
+			new Loc () { x = loc.x + 1, y = loc.y },
+			new Loc () { x = loc.x - 1, y = loc.y },
+			new Loc () { x = loc.x , y = loc.y + 1 },
+			new Loc () { x = loc.x , y = loc.y - 1 }
+		});
+
+		foreach (Loc _loc in preList) {
+			if (IsInScope (_loc))
+				list.Add (_loc);
+		}
+
+		return list;
+	}
+
+
 	public static AnimalType RandomGetAnimalType ()
 	{
 		AnimalType[] types = new AnimalType[]{

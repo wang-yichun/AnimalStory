@@ -73,6 +73,7 @@ public class AnimalControllerBase : uFrame.MVVM.Controller {
     public virtual void InitializeAnimal(AnimalViewModel viewModel) {
         // This is called when a AnimalViewModel is created
         viewModel.Tapped.Action = this.TappedHandler;
+        viewModel.DestroySelf.Action = this.DestroySelfHandler;
         AnimalViewModelManager.Add(viewModel);
     }
     
@@ -84,8 +85,15 @@ public class AnimalControllerBase : uFrame.MVVM.Controller {
     public virtual void Tapped(AnimalViewModel viewModel) {
     }
     
+    public virtual void DestroySelf(AnimalViewModel viewModel) {
+    }
+    
     public virtual void TappedHandler(TappedCommand command) {
         this.Tapped(command.Sender as AnimalViewModel);
+    }
+    
+    public virtual void DestroySelfHandler(DestroySelfCommand command) {
+        this.DestroySelf(command.Sender as AnimalViewModel);
     }
 }
 
@@ -143,7 +151,10 @@ public class InGameRootControllerBase : uFrame.MVVM.Controller {
     public virtual void InitializeInGameRoot(InGameRootViewModel viewModel) {
         // This is called when a InGameRootViewModel is created
         viewModel.CreateAnimal.Action = this.CreateAnimalHandler;
+        viewModel.RemoveAnimal.Action = this.RemoveAnimalHandler;
         viewModel.InitAllAnimal.Action = this.InitAllAnimalHandler;
+        viewModel.TestCommand.Action = this.TestCommandHandler;
+        viewModel.RefreshSameCount.Action = this.RefreshSameCountHandler;
         InGameRootViewModelManager.Add(viewModel);
     }
     
@@ -155,15 +166,36 @@ public class InGameRootControllerBase : uFrame.MVVM.Controller {
     public virtual void InitAllAnimal(InGameRootViewModel viewModel) {
     }
     
+    public virtual void TestCommand(InGameRootViewModel viewModel) {
+    }
+    
     public virtual void CreateAnimalHandler(CreateAnimalCommand command) {
         this.CreateAnimal(command.Sender as InGameRootViewModel, command.Argument);
+    }
+    
+    public virtual void RemoveAnimalHandler(RemoveAnimalCommand command) {
+        this.RemoveAnimal(command.Sender as InGameRootViewModel, command.Argument);
     }
     
     public virtual void InitAllAnimalHandler(InitAllAnimalCommand command) {
         this.InitAllAnimal(command.Sender as InGameRootViewModel);
     }
     
+    public virtual void TestCommandHandler(TestCommandCommand command) {
+        this.TestCommand(command.Sender as InGameRootViewModel);
+    }
+    
+    public virtual void RefreshSameCountHandler(RefreshSameCountCommand command) {
+        this.RefreshSameCount(command.Sender as InGameRootViewModel, command.Argument);
+    }
+    
     public virtual void CreateAnimal(InGameRootViewModel viewModel, AnimalProp arg) {
+    }
+    
+    public virtual void RemoveAnimal(InGameRootViewModel viewModel, AnimalProp arg) {
+    }
+    
+    public virtual void RefreshSameCount(InGameRootViewModel viewModel, AnimalViewModel arg) {
     }
 }
 
