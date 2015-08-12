@@ -28,7 +28,8 @@ public class Locator : LocatorBase
 		return null;
 	}
 
-	public static List<Loc> AroundLoc (Loc loc) {
+	public static List<Loc> AroundLoc (Loc loc)
+	{
 		List<Loc> list = new List<Loc> ();
 		List<Loc> preList = new List<Loc> (new Loc[]{
 			new Loc () { x = loc.x + 1, y = loc.y },
@@ -44,7 +45,6 @@ public class Locator : LocatorBase
 
 		return list;
 	}
-
 
 	public static AnimalType RandomGetAnimalType ()
 	{

@@ -13,7 +13,6 @@ using UnityEngine.UI;
 
 public class InGameRootView : InGameRootViewBase
 {
-	public GameObject MapContainerObj;
 	public GameObject[] AnimalsPrefab;
 
 	public GameObject IdleAnimalsCountText;
@@ -77,10 +76,10 @@ public class InGameRootView : InGameRootViewBase
 
 		string name = Locator.Loc2Name (new Loc (){ x = animalVM.Loc.x, y = animalVM.Loc.y });
 
-		GameObject containerObj = MapContainerObj.transform.FindChild (name).gameObject;
+//		GameObject containerObj = MapContainerObj.transform.FindChild (name).gameObject;
 
 		ViewBase animalV = InstantiateView (prefabSelected, viewModel);
-		animalV.gameObject.transform.position = containerObj.transform.localPosition;
+		animalV.gameObject.transform.position = InGameRootViewHelper.Loc2Pos (animalVM.Loc);
 
 		return animalV;
 	}

@@ -161,6 +161,7 @@ public class InGameRootController : InGameRootControllerBase
 			.GroupBy (animal => new {animal.Loc.x})
 				.ToDictionary (it => it.Key.x, it => it.Count ());
 
+
 //		foreach (var it in dictionary) {
 //			Debug.Log(it.Key + " : " + it.Value);
 //		}

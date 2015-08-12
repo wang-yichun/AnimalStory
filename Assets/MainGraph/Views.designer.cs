@@ -129,6 +129,9 @@ public class GreenFrogAnimalViewBase : AnimalView {
 public class InGameRootViewBase : uFrame.MVVM.ViewBase {
     
     [UnityEngine.SerializeField()]
+    private InGameRootViewHelper _InGameRootViewHelper;
+    
+    [UnityEngine.SerializeField()]
     [UFGroup("View Model Properties")]
     [UnityEngine.HideInInspector()]
     public MapInfo _MapInfo;
@@ -209,6 +212,12 @@ public class InGameRootViewBase : uFrame.MVVM.ViewBase {
     public InGameRootViewModel InGameRoot {
         get {
             return (InGameRootViewModel)ViewModelObject;
+        }
+    }
+    
+    public virtual InGameRootViewHelper InGameRootViewHelper {
+        get {
+            return _InGameRootViewHelper ?? (_InGameRootViewHelper = this.gameObject.EnsureComponent<InGameRootViewHelper>());
         }
     }
     
