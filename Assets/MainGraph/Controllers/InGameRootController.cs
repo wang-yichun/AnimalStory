@@ -149,34 +149,22 @@ public class InGameRootController : InGameRootControllerBase
 		base.CreateAndDrop (viewModel);
 		Debug.Log ("todo: CreateAndDrop");
 
-		List<int> nullCollInfo = getNullCountByCol (viewModel);
+		Dictionary<int, int> ExistCollInfo = GetExistCountByCol (viewModel);
 	}
 
-	public List<int> getNullCountByCol (InGameRootViewModel viewModel)
+	/**
+	 * return: 1:x1 2:x1 3:x1 4:x4 5:x1
+	 * */
+	public Dictionary<int, int> GetExistCountByCol (InGameRootViewModel viewModel)
 	{
 		var dictionary = viewModel.AnimalCollections
 			.GroupBy (animal => new {animal.Loc.x})
 				.ToDictionary (it => it.Key.x, it => it.Count ());
-//				.ToList ();
 
-		foreach (var it in dictionary) {
-			Debug.Log(it.Key + " : " + it.Value);
-		}
-
-		return null;
-//		var queryLastNames =
-//			from student in students
-//				group student by student.LastName into newGroup
-//				orderby newGroup.Key
-//				select newGroup;
-//		
-//		foreach (var nameGroup in queryLastNames)
-//		{
-//			Console.WriteLine("Key: {0}", nameGroup.Key);
-//			foreach (var student in nameGroup)
-//			{
-//				Console.WriteLine("\t{0}, {1}", student.LastName, student.FirstName);
-//			}
+//		foreach (var it in dictionary) {
+//			Debug.Log(it.Key + " : " + it.Value);
 //		}
+
+		return dictionary;
 	}
 }
