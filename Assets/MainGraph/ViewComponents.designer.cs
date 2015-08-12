@@ -34,10 +34,6 @@ public class InGameRootViewHelperBase : uFrame.MVVM.ViewComponent {
         InGameRoot.InitAllAnimal.OnNext(new InitAllAnimalCommand() { Sender = InGameRoot });
     }
     
-    public virtual void ExecuteTestCommand() {
-        InGameRoot.TestCommand.OnNext(new TestCommandCommand() { Sender = InGameRoot });
-    }
-    
     public virtual void ExecuteCalcAnimalsCount() {
         InGameRoot.CalcAnimalsCount.OnNext(new CalcAnimalsCountCommand() { Sender = InGameRoot });
     }
@@ -64,11 +60,6 @@ public class InGameRootViewHelperBase : uFrame.MVVM.ViewComponent {
         InGameRoot.RemoveAnimal.OnNext(command);
     }
     
-    public virtual void ExecuteAnimalDropTo(AnimalDropToCommand command) {
-        command.Sender = InGameRoot;
-        InGameRoot.AnimalDropTo.OnNext(command);
-    }
-    
     public virtual void ExecuteCreateAndDrop(CreateAndDropCommand command) {
         command.Sender = InGameRoot;
         InGameRoot.CreateAndDrop.OnNext(command);
@@ -77,11 +68,6 @@ public class InGameRootViewHelperBase : uFrame.MVVM.ViewComponent {
     public virtual void ExecuteInitAllAnimal(InitAllAnimalCommand command) {
         command.Sender = InGameRoot;
         InGameRoot.InitAllAnimal.OnNext(command);
-    }
-    
-    public virtual void ExecuteTestCommand(TestCommandCommand command) {
-        command.Sender = InGameRoot;
-        InGameRoot.TestCommand.OnNext(command);
     }
     
     public virtual void ExecuteRefreshSameCount(RefreshSameCountCommand command) {

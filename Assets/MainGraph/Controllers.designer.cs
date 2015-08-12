@@ -184,10 +184,8 @@ public class InGameRootControllerBase : uFrame.MVVM.Controller {
         // This is called when a InGameRootViewModel is created
         viewModel.CreateAnimal.Action = this.CreateAnimalHandler;
         viewModel.RemoveAnimal.Action = this.RemoveAnimalHandler;
-        viewModel.AnimalDropTo.Action = this.AnimalDropToHandler;
         viewModel.CreateAndDrop.Action = this.CreateAndDropHandler;
         viewModel.InitAllAnimal.Action = this.InitAllAnimalHandler;
-        viewModel.TestCommand.Action = this.TestCommandHandler;
         viewModel.RefreshSameCount.Action = this.RefreshSameCountHandler;
         viewModel.CalcAnimalsCount.Action = this.CalcAnimalsCountHandler;
         InGameRootViewModelManager.Add(viewModel);
@@ -204,9 +202,6 @@ public class InGameRootControllerBase : uFrame.MVVM.Controller {
     public virtual void InitAllAnimal(InGameRootViewModel viewModel) {
     }
     
-    public virtual void TestCommand(InGameRootViewModel viewModel) {
-    }
-    
     public virtual void CalcAnimalsCount(InGameRootViewModel viewModel) {
     }
     
@@ -218,20 +213,12 @@ public class InGameRootControllerBase : uFrame.MVVM.Controller {
         this.RemoveAnimal(command.Sender as InGameRootViewModel, command.Argument);
     }
     
-    public virtual void AnimalDropToHandler(AnimalDropToCommand command) {
-        this.AnimalDropTo(command.Sender as InGameRootViewModel, command);
-    }
-    
     public virtual void CreateAndDropHandler(CreateAndDropCommand command) {
         this.CreateAndDrop(command.Sender as InGameRootViewModel);
     }
     
     public virtual void InitAllAnimalHandler(InitAllAnimalCommand command) {
         this.InitAllAnimal(command.Sender as InGameRootViewModel);
-    }
-    
-    public virtual void TestCommandHandler(TestCommandCommand command) {
-        this.TestCommand(command.Sender as InGameRootViewModel);
     }
     
     public virtual void RefreshSameCountHandler(RefreshSameCountCommand command) {
@@ -246,9 +233,6 @@ public class InGameRootControllerBase : uFrame.MVVM.Controller {
     }
     
     public virtual void RemoveAnimal(InGameRootViewModel viewModel, AnimalProp arg) {
-    }
-    
-    public virtual void AnimalDropTo(InGameRootViewModel viewModel, AnimalDropToCommand arg) {
     }
     
     public virtual void RefreshSameCount(InGameRootViewModel viewModel, AnimalViewModel arg) {

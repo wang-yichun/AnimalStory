@@ -396,13 +396,9 @@ public partial class InGameRootViewModelBase : uFrame.MVVM.ViewModel {
     
     private Signal<RemoveAnimalCommand> _RemoveAnimal;
     
-    private Signal<AnimalDropToCommand> _AnimalDropTo;
-    
     private Signal<CreateAndDropCommand> _CreateAndDrop;
     
     private Signal<InitAllAnimalCommand> _InitAllAnimal;
-    
-    private Signal<TestCommandCommand> _TestCommand;
     
     private Signal<RefreshSameCountCommand> _RefreshSameCount;
     
@@ -583,15 +579,6 @@ public partial class InGameRootViewModelBase : uFrame.MVVM.ViewModel {
         }
     }
     
-    public virtual Signal<AnimalDropToCommand> AnimalDropTo {
-        get {
-            return _AnimalDropTo;
-        }
-        set {
-            _AnimalDropTo = value;
-        }
-    }
-    
     public virtual Signal<CreateAndDropCommand> CreateAndDrop {
         get {
             return _CreateAndDrop;
@@ -607,15 +594,6 @@ public partial class InGameRootViewModelBase : uFrame.MVVM.ViewModel {
         }
         set {
             _InitAllAnimal = value;
-        }
-    }
-    
-    public virtual Signal<TestCommandCommand> TestCommand {
-        get {
-            return _TestCommand;
-        }
-        set {
-            _TestCommand = value;
         }
     }
     
@@ -641,10 +619,8 @@ public partial class InGameRootViewModelBase : uFrame.MVVM.ViewModel {
         base.Bind();
         this.CreateAnimal = new Signal<CreateAnimalCommand>(this);
         this.RemoveAnimal = new Signal<RemoveAnimalCommand>(this);
-        this.AnimalDropTo = new Signal<AnimalDropToCommand>(this);
         this.CreateAndDrop = new Signal<CreateAndDropCommand>(this);
         this.InitAllAnimal = new Signal<InitAllAnimalCommand>(this);
-        this.TestCommand = new Signal<TestCommandCommand>(this);
         this.RefreshSameCount = new Signal<RefreshSameCountCommand>(this);
         this.CalcAnimalsCount = new Signal<CalcAnimalsCountCommand>(this);
         _CanTapProperty = new P<Boolean>(this, "CanTap");
@@ -685,10 +661,8 @@ public partial class InGameRootViewModelBase : uFrame.MVVM.ViewModel {
         base.FillCommands(list);
         list.Add(new ViewModelCommandInfo("CreateAnimal", CreateAnimal) { ParameterType = typeof(AnimalProp) });
         list.Add(new ViewModelCommandInfo("RemoveAnimal", RemoveAnimal) { ParameterType = typeof(AnimalProp) });
-        list.Add(new ViewModelCommandInfo("AnimalDropTo", AnimalDropTo) { ParameterType = typeof(AnimalDropToCommand) });
         list.Add(new ViewModelCommandInfo("CreateAndDrop", CreateAndDrop) { ParameterType = typeof(void) });
         list.Add(new ViewModelCommandInfo("InitAllAnimal", InitAllAnimal) { ParameterType = typeof(void) });
-        list.Add(new ViewModelCommandInfo("TestCommand", TestCommand) { ParameterType = typeof(void) });
         list.Add(new ViewModelCommandInfo("RefreshSameCount", RefreshSameCount) { ParameterType = typeof(AnimalViewModel) });
         list.Add(new ViewModelCommandInfo("CalcAnimalsCount", CalcAnimalsCount) { ParameterType = typeof(void) });
     }

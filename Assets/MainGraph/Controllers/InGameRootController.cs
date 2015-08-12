@@ -64,21 +64,6 @@ public class InGameRootController : InGameRootControllerBase
 		}
 	}
 
-	public override void TestCommand (InGameRootViewModel viewModel)
-	{
-		base.TestCommand (viewModel);
-
-		var locList = viewModel.AnimalCollections
-			.Where (vm => vm.AnimalType == AnimalType.BLUE_BIRD)
-				.Select (vm => vm.Loc)
-				.ToDictionary (loc => Locator.Loc2Name (loc), loc => "x:" + loc.x.ToString ());
-
-		foreach (var v in locList) {
-			Debug.Log (v.Key + " - " + v.Value);
-		}
-
-	}
-
 	public override void RefreshSameCount (InGameRootViewModel viewModel, AnimalViewModel arg)
 	{
 		base.RefreshSameCount (viewModel, arg);
@@ -223,10 +208,5 @@ public class InGameRootController : InGameRootControllerBase
 //		}
 
 		return dictionary;
-	}
-
-	public override void AnimalDropTo (InGameRootViewModel viewModel, AnimalDropToCommand arg)
-	{
-		base.AnimalDropTo (viewModel, arg);
 	}
 }

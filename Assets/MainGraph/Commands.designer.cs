@@ -15,7 +15,6 @@ using System.Linq;
 using uFrame.Kernel;
 using uFrame.MVVM;
 using uFrame.Serialization;
-using UnityEngine;
 
 
 public partial class TappedCommand : uFrame.MVVM.ViewModelCommand {
@@ -70,9 +69,6 @@ public partial class CreateAndDropCommand : uFrame.MVVM.ViewModelCommand {
 public partial class InitAllAnimalCommand : uFrame.MVVM.ViewModelCommand {
 }
 
-public partial class TestCommandCommand : uFrame.MVVM.ViewModelCommand {
-}
-
 public partial class RefreshSameCountCommand : uFrame.MVVM.ViewModelCommand {
     
     private AnimalViewModel _Argument;
@@ -88,29 +84,4 @@ public partial class RefreshSameCountCommand : uFrame.MVVM.ViewModelCommand {
 }
 
 public partial class CalcAnimalsCountCommand : uFrame.MVVM.ViewModelCommand {
-}
-
-public partial class AnimalDropToCommand : ViewModelCommand {
-    
-    private AnimalViewModel _Animal;
-    
-    private AnimalProp _Target;
-    
-    public AnimalViewModel Animal {
-        get {
-            return _Animal;
-        }
-        set {
-            _Animal = value;
-        }
-    }
-    
-    public AnimalProp Target {
-        get {
-            return _Target;
-        }
-        set {
-            _Target = value;
-        }
-    }
 }
