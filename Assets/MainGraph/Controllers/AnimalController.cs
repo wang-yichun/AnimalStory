@@ -46,4 +46,7 @@ public class AnimalController : AnimalControllerBase
 		});
 	}
 
+    public override void GotDropTarget(AnimalViewModel viewModel) {
+        base.GotDropTarget(viewModel);
+    }
 }

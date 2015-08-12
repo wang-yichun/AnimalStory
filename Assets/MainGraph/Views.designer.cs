@@ -315,6 +315,11 @@ public class InGameRootViewBase : uFrame.MVVM.ViewBase {
         InGameRoot.RemoveAnimal.OnNext(command);
     }
     
+    public virtual void ExecuteAnimalDropTo(AnimalDropToCommand command) {
+        command.Sender = InGameRoot;
+        InGameRoot.AnimalDropTo.OnNext(command);
+    }
+    
     public virtual void ExecuteCreateAndDrop(CreateAndDropCommand command) {
         command.Sender = InGameRoot;
         InGameRoot.CreateAndDrop.OnNext(command);
@@ -380,6 +385,11 @@ public class AnimalViewBase : uFrame.MVVM.ViewBase {
     [UnityEngine.HideInInspector()]
     public Boolean _needDrop;
     
+    [UnityEngine.SerializeField()]
+    [UFGroup("View Model Properties")]
+    [UnityEngine.HideInInspector()]
+    public AnimalProp _TargetProp;
+    
     [UFToggleGroup("SameCount")]
     [UnityEngine.HideInInspector()]
     public bool _BindSameCount = true;
@@ -399,6 +409,16 @@ public class AnimalViewBase : uFrame.MVVM.ViewBase {
     [UnityEngine.HideInInspector()]
     [UnityEngine.Serialization.FormerlySerializedAsAttribute("_AnimalStateonlyWhenChanged")]
     protected bool _AnimalStateOnlyWhenChanged;
+    
+    [UFToggleGroup("TargetProp")]
+    [UnityEngine.HideInInspector()]
+    public bool _BindTargetProp = true;
+    
+    [UFGroup("TargetProp")]
+    [UnityEngine.SerializeField()]
+    [UnityEngine.HideInInspector()]
+    [UnityEngine.Serialization.FormerlySerializedAsAttribute("_TargetProponlyWhenChanged")]
+    protected bool _TargetPropOnlyWhenChanged;
     
     public override string DefaultIdentifier {
         get {
@@ -429,6 +449,7 @@ public class AnimalViewBase : uFrame.MVVM.ViewBase {
         animalview.Loc = this._Loc;
         animalview.needDestroy = this._needDestroy;
         animalview.needDrop = this._needDrop;
+        animalview.TargetProp = this._TargetProp;
     }
     
     public override void Bind() {
@@ -441,6 +462,9 @@ public class AnimalViewBase : uFrame.MVVM.ViewBase {
         }
         if (_BindAnimalState) {
             this.BindStateProperty(this.Animal.AnimalStateProperty, this.AnimalStateChanged, _AnimalStateOnlyWhenChanged);
+        }
+        if (_BindTargetProp) {
+            this.BindProperty(this.Animal.TargetPropProperty, this.TargetPropChanged, _TargetPropOnlyWhenChanged);
         }
     }
     
@@ -468,12 +492,19 @@ public class AnimalViewBase : uFrame.MVVM.ViewBase {
     public virtual void OnDropping() {
     }
     
+    public virtual void TargetPropChanged(AnimalProp arg1) {
+    }
+    
     public virtual void ExecuteTapped() {
         Animal.Tapped.OnNext(new TappedCommand() { Sender = Animal });
     }
     
     public virtual void ExecuteDestroySelf() {
         Animal.DestroySelf.OnNext(new DestroySelfCommand() { Sender = Animal });
+    }
+    
+    public virtual void ExecuteGotDropTarget() {
+        Animal.GotDropTarget.OnNext(new GotDropTargetCommand() { Sender = Animal });
     }
     
     public virtual void ExecuteTapped(TappedCommand command) {
@@ -484,5 +515,10 @@ public class AnimalViewBase : uFrame.MVVM.ViewBase {
     public virtual void ExecuteDestroySelf(DestroySelfCommand command) {
         command.Sender = Animal;
         Animal.DestroySelf.OnNext(command);
+    }
+    
+    public virtual void ExecuteGotDropTarget(GotDropTargetCommand command) {
+        command.Sender = Animal;
+        Animal.GotDropTarget.OnNext(command);
     }
 }

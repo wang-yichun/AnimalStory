@@ -149,7 +149,36 @@ public class InGameRootController : InGameRootControllerBase
 		base.CreateAndDrop (viewModel);
 		Debug.Log ("todo: CreateAndDrop");
 
-		Dictionary<int, int> ExistCollInfo = GetExistCountByCol (viewModel);
+		Dictionary<int, int> existColInfo = GetExistCountByCol (viewModel);
+		for (int x = viewModel.MapInfo.xmin; x <= viewModel.MapInfo.xmax; x++) {
+			int existCount;
+			if (existColInfo.TryGetValue (x, out existCount)) {
+				int needAddCount = viewModel.MapInfo.ymax - existCount;
+				int nully = 0;
+				for (int y = viewModel.MapInfo.ymin; y <= viewModel.MapInfo.ymax; y++) {
+
+					AnimalViewModel animal = GetAnimalAtLoc (viewModel, new Loc (x, y));
+
+					if (animal == null) {
+						nully = y;
+						break;
+					} else {
+						if (nully != 0) { // haven't got null space, yet.
+							animal.TargetProp = new AnimalProp () {
+								AnimalType = animal.AnimalType,
+								Loc = new Loc(x, nully)
+							};
+
+							nully++;
+						}
+					}
+
+				}
+			}
+			
+			Debug.Log ("existCount: " + existCount);
+
+		}
 	}
 
 	/**
@@ -167,5 +196,10 @@ public class InGameRootController : InGameRootControllerBase
 //		}
 
 		return dictionary;
+	}
+
+	public override void AnimalDropTo (InGameRootViewModel viewModel, AnimalDropToCommand arg)
+	{
+		base.AnimalDropTo (viewModel, arg);
 	}
 }

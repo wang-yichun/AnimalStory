@@ -11,8 +11,6 @@ GameObject:
   - 114: {fileID: 11482688}
   - 114: {fileID: 11474332}
   - 114: {fileID: 11437024}
-  - 114: {fileID: 11450934}
-  - 114: {fileID: 11450810}
   m_Layer: 0
   m_Name: Services
   m_TagString: Untagged
@@ -139,34 +137,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e495af70f54f4470cadcd6b542935631, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  xmin: 0
-  xmax: 0
-  ymin: 0
-  ymax: 0
---- !u!114 &11450810
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 102050}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b5f2c0816e268413a94eaf3e3b164f8f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Locator: {fileID: 0}
-  AnimalsPrefab: []
---- !u!114 &11450934
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 102050}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 926fb2361076247a8ba1ea755c152f93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &11474332

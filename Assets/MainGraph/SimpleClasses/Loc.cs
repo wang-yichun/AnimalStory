@@ -9,6 +9,14 @@ using uFrame.Serialization;
 
 public class Loc : LocBase
 {
+	public Loc() {
+	}
+
+	public Loc(int x, int y) {
+		this.x = x;
+		this.y = y;
+	}
+
 	public static bool operator == (Loc a, Loc b)
 	{
 		// If both are null, or both are same instance, return true.

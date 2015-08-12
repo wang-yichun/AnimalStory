@@ -64,6 +64,11 @@ public class InGameRootViewHelperBase : uFrame.MVVM.ViewComponent {
         InGameRoot.RemoveAnimal.OnNext(command);
     }
     
+    public virtual void ExecuteAnimalDropTo(AnimalDropToCommand command) {
+        command.Sender = InGameRoot;
+        InGameRoot.AnimalDropTo.OnNext(command);
+    }
+    
     public virtual void ExecuteCreateAndDrop(CreateAndDropCommand command) {
         command.Sender = InGameRoot;
         InGameRoot.CreateAndDrop.OnNext(command);

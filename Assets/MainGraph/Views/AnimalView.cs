@@ -20,6 +20,9 @@ public class AnimalView : AnimalViewBase
 		// NOTE: this method is only invoked if the 'Initialize ViewModel' is checked in the inspector.
 		// var vm = model as AnimalViewModel;
 		// This method is invoked when applying the data from the inspector to the viewmodel.  Add any view-specific customizations here.
+
+		AnimalViewModel viewModel = model as AnimalViewModel;
+		viewModel.TargetProp = null;
 	}
     
 	public override void Bind ()
@@ -84,4 +87,10 @@ public class AnimalView : AnimalViewBase
 	{
 		this.ExecuteDestroySelf ();
 	}
+
+    public override void TargetPropChanged(AnimalProp arg1) {
+		if (arg1 != null) {
+
+		}
+    }
 }

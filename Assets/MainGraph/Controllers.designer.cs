@@ -74,6 +74,7 @@ public class AnimalControllerBase : uFrame.MVVM.Controller {
         // This is called when a AnimalViewModel is created
         viewModel.Tapped.Action = this.TappedHandler;
         viewModel.DestroySelf.Action = this.DestroySelfHandler;
+        viewModel.GotDropTarget.Action = this.GotDropTargetHandler;
         AnimalViewModelManager.Add(viewModel);
     }
     
@@ -88,12 +89,19 @@ public class AnimalControllerBase : uFrame.MVVM.Controller {
     public virtual void DestroySelf(AnimalViewModel viewModel) {
     }
     
+    public virtual void GotDropTarget(AnimalViewModel viewModel) {
+    }
+    
     public virtual void TappedHandler(TappedCommand command) {
         this.Tapped(command.Sender as AnimalViewModel);
     }
     
     public virtual void DestroySelfHandler(DestroySelfCommand command) {
         this.DestroySelf(command.Sender as AnimalViewModel);
+    }
+    
+    public virtual void GotDropTargetHandler(GotDropTargetCommand command) {
+        this.GotDropTarget(command.Sender as AnimalViewModel);
     }
 }
 
@@ -152,6 +160,7 @@ public class InGameRootControllerBase : uFrame.MVVM.Controller {
         // This is called when a InGameRootViewModel is created
         viewModel.CreateAnimal.Action = this.CreateAnimalHandler;
         viewModel.RemoveAnimal.Action = this.RemoveAnimalHandler;
+        viewModel.AnimalDropTo.Action = this.AnimalDropToHandler;
         viewModel.CreateAndDrop.Action = this.CreateAndDropHandler;
         viewModel.InitAllAnimal.Action = this.InitAllAnimalHandler;
         viewModel.TestCommand.Action = this.TestCommandHandler;
@@ -185,6 +194,10 @@ public class InGameRootControllerBase : uFrame.MVVM.Controller {
         this.RemoveAnimal(command.Sender as InGameRootViewModel, command.Argument);
     }
     
+    public virtual void AnimalDropToHandler(AnimalDropToCommand command) {
+        this.AnimalDropTo(command.Sender as InGameRootViewModel, command);
+    }
+    
     public virtual void CreateAndDropHandler(CreateAndDropCommand command) {
         this.CreateAndDrop(command.Sender as InGameRootViewModel);
     }
@@ -209,6 +222,9 @@ public class InGameRootControllerBase : uFrame.MVVM.Controller {
     }
     
     public virtual void RemoveAnimal(InGameRootViewModel viewModel, AnimalProp arg) {
+    }
+    
+    public virtual void AnimalDropTo(InGameRootViewModel viewModel, AnimalDropToCommand arg) {
     }
     
     public virtual void RefreshSameCount(InGameRootViewModel viewModel, AnimalViewModel arg) {

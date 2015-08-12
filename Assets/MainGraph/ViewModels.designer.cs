@@ -47,9 +47,13 @@ public partial class AnimalViewModelBase : uFrame.MVVM.ViewModel {
     
     private P<Boolean> _needDropProperty;
     
+    private P<AnimalProp> _TargetPropProperty;
+    
     private Signal<TappedCommand> _Tapped;
     
     private Signal<DestroySelfCommand> _DestroySelf;
+    
+    private Signal<GotDropTargetCommand> _GotDropTarget;
     
     public AnimalViewModelBase(uFrame.Kernel.IEventAggregator aggregator) : 
             base(aggregator) {
@@ -145,6 +149,15 @@ public partial class AnimalViewModelBase : uFrame.MVVM.ViewModel {
         }
     }
     
+    public virtual P<AnimalProp> TargetPropProperty {
+        get {
+            return _TargetPropProperty;
+        }
+        set {
+            _TargetPropProperty = value;
+        }
+    }
+    
     public virtual Boolean ShouldDestroy {
         get {
             return ShouldDestroyProperty.Value;
@@ -217,6 +230,15 @@ public partial class AnimalViewModelBase : uFrame.MVVM.ViewModel {
         }
     }
     
+    public virtual AnimalProp TargetProp {
+        get {
+            return TargetPropProperty.Value;
+        }
+        set {
+            TargetPropProperty.Value = value;
+        }
+    }
+    
     public virtual Signal<TappedCommand> Tapped {
         get {
             return _Tapped;
@@ -235,10 +257,20 @@ public partial class AnimalViewModelBase : uFrame.MVVM.ViewModel {
         }
     }
     
+    public virtual Signal<GotDropTargetCommand> GotDropTarget {
+        get {
+            return _GotDropTarget;
+        }
+        set {
+            _GotDropTarget = value;
+        }
+    }
+    
     public override void Bind() {
         base.Bind();
         this.Tapped = new Signal<TappedCommand>(this);
         this.DestroySelf = new Signal<DestroySelfCommand>(this);
+        this.GotDropTarget = new Signal<GotDropTargetCommand>(this);
         _ShouldDestroyProperty = new P<Boolean>(this, "ShouldDestroy");
         _ShouldDropProperty = new P<Boolean>(this, "ShouldDrop");
         _ShouldNotDropProperty = new P<Boolean>(this, "ShouldNotDrop");
@@ -247,6 +279,7 @@ public partial class AnimalViewModelBase : uFrame.MVVM.ViewModel {
         _LocProperty = new P<Loc>(this, "Loc");
         _needDestroyProperty = new P<Boolean>(this, "needDestroy");
         _needDropProperty = new P<Boolean>(this, "needDrop");
+        _TargetPropProperty = new P<AnimalProp>(this, "TargetProp");
         _AnimalStateProperty = new AnimalState(this, "AnimalState");
         ResetShouldDestroy();
         ResetShouldDrop();
@@ -278,6 +311,7 @@ public partial class AnimalViewModelBase : uFrame.MVVM.ViewModel {
         base.FillCommands(list);
         list.Add(new ViewModelCommandInfo("Tapped", Tapped) { ParameterType = typeof(void) });
         list.Add(new ViewModelCommandInfo("DestroySelf", DestroySelf) { ParameterType = typeof(void) });
+        list.Add(new ViewModelCommandInfo("GotDropTarget", GotDropTarget) { ParameterType = typeof(void) });
     }
     
     protected override void FillProperties(System.Collections.Generic.List<uFrame.MVVM.ViewModelPropertyInfo> list) {
@@ -300,6 +334,8 @@ public partial class AnimalViewModelBase : uFrame.MVVM.ViewModel {
         list.Add(new ViewModelPropertyInfo(_needDropProperty, false, false, false, false));
         // PropertiesChildItem
         list.Add(new ViewModelPropertyInfo(_AnimalStateProperty, false, false, false, false));
+        // PropertiesChildItem
+        list.Add(new ViewModelPropertyInfo(_TargetPropProperty, false, false, false, false));
     }
     
     public virtual System.Collections.Generic.IEnumerable<uFrame.MVVM.IObservableProperty> GetShouldDestroyDependents() {
@@ -383,6 +419,8 @@ public partial class InGameRootViewModelBase : uFrame.MVVM.ViewModel {
     private Signal<CreateAnimalCommand> _CreateAnimal;
     
     private Signal<RemoveAnimalCommand> _RemoveAnimal;
+    
+    private Signal<AnimalDropToCommand> _AnimalDropTo;
     
     private Signal<CreateAndDropCommand> _CreateAndDrop;
     
@@ -551,6 +589,15 @@ public partial class InGameRootViewModelBase : uFrame.MVVM.ViewModel {
         }
     }
     
+    public virtual Signal<AnimalDropToCommand> AnimalDropTo {
+        get {
+            return _AnimalDropTo;
+        }
+        set {
+            _AnimalDropTo = value;
+        }
+    }
+    
     public virtual Signal<CreateAndDropCommand> CreateAndDrop {
         get {
             return _CreateAndDrop;
@@ -600,6 +647,7 @@ public partial class InGameRootViewModelBase : uFrame.MVVM.ViewModel {
         base.Bind();
         this.CreateAnimal = new Signal<CreateAnimalCommand>(this);
         this.RemoveAnimal = new Signal<RemoveAnimalCommand>(this);
+        this.AnimalDropTo = new Signal<AnimalDropToCommand>(this);
         this.CreateAndDrop = new Signal<CreateAndDropCommand>(this);
         this.InitAllAnimal = new Signal<InitAllAnimalCommand>(this);
         this.TestCommand = new Signal<TestCommandCommand>(this);
@@ -640,6 +688,7 @@ public partial class InGameRootViewModelBase : uFrame.MVVM.ViewModel {
         base.FillCommands(list);
         list.Add(new ViewModelCommandInfo("CreateAnimal", CreateAnimal) { ParameterType = typeof(AnimalProp) });
         list.Add(new ViewModelCommandInfo("RemoveAnimal", RemoveAnimal) { ParameterType = typeof(AnimalProp) });
+        list.Add(new ViewModelCommandInfo("AnimalDropTo", AnimalDropTo) { ParameterType = typeof(AnimalDropToCommand) });
         list.Add(new ViewModelCommandInfo("CreateAndDrop", CreateAndDrop) { ParameterType = typeof(void) });
         list.Add(new ViewModelCommandInfo("InitAllAnimal", InitAllAnimal) { ParameterType = typeof(void) });
         list.Add(new ViewModelCommandInfo("TestCommand", TestCommand) { ParameterType = typeof(void) });
