@@ -24,7 +24,16 @@ public partial class TappedCommand : uFrame.MVVM.ViewModelCommand {
 public partial class DestroySelfCommand : uFrame.MVVM.ViewModelCommand {
 }
 
+public partial class StartDropCommand : uFrame.MVVM.ViewModelCommand {
+}
+
 public partial class GotDropTargetCommand : uFrame.MVVM.ViewModelCommand {
+}
+
+public partial class GotIdleCommand : uFrame.MVVM.ViewModelCommand {
+}
+
+public partial class DebugCommandCommand : uFrame.MVVM.ViewModelCommand {
 }
 
 public partial class CreateAnimalCommand : uFrame.MVVM.ViewModelCommand {

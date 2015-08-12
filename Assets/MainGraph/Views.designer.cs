@@ -151,6 +151,11 @@ public class InGameRootViewBase : uFrame.MVVM.ViewBase {
     [UnityEngine.HideInInspector()]
     public Int32 _NullAnimalsCount;
     
+    [UnityEngine.SerializeField()]
+    [UFGroup("View Model Properties")]
+    [UnityEngine.HideInInspector()]
+    public Boolean _IsDropping;
+    
     [UFToggleGroup("InGameState")]
     [UnityEngine.HideInInspector()]
     public bool _BindInGameState = true;
@@ -231,6 +236,7 @@ public class InGameRootViewBase : uFrame.MVVM.ViewBase {
         ingamerootview.RuleInfo = this._RuleInfo;
         ingamerootview.IdleAnimalsCount = this._IdleAnimalsCount;
         ingamerootview.NullAnimalsCount = this._NullAnimalsCount;
+        ingamerootview.IsDropping = this._IsDropping;
     }
     
     public override void Bind() {
@@ -361,6 +367,9 @@ public class InGameRootViewBase : uFrame.MVVM.ViewBase {
 public class AnimalViewBase : uFrame.MVVM.ViewBase {
     
     [UnityEngine.SerializeField()]
+    private InGameRootViewHelper _InGameRootViewHelper;
+    
+    [UnityEngine.SerializeField()]
     [UFGroup("View Model Properties")]
     [UnityEngine.HideInInspector()]
     public AnimalType _AnimalType;
@@ -383,22 +392,7 @@ public class AnimalViewBase : uFrame.MVVM.ViewBase {
     [UnityEngine.SerializeField()]
     [UFGroup("View Model Properties")]
     [UnityEngine.HideInInspector()]
-    public Boolean _needDrop;
-    
-    [UnityEngine.SerializeField()]
-    [UFGroup("View Model Properties")]
-    [UnityEngine.HideInInspector()]
     public AnimalProp _TargetProp;
-    
-    [UFToggleGroup("SameCount")]
-    [UnityEngine.HideInInspector()]
-    public bool _BindSameCount = true;
-    
-    [UFGroup("SameCount")]
-    [UnityEngine.SerializeField()]
-    [UnityEngine.HideInInspector()]
-    [UnityEngine.Serialization.FormerlySerializedAsAttribute("_SameCountonlyWhenChanged")]
-    protected bool _SameCountOnlyWhenChanged;
     
     [UFToggleGroup("AnimalState")]
     [UnityEngine.HideInInspector()]
@@ -409,16 +403,6 @@ public class AnimalViewBase : uFrame.MVVM.ViewBase {
     [UnityEngine.HideInInspector()]
     [UnityEngine.Serialization.FormerlySerializedAsAttribute("_AnimalStateonlyWhenChanged")]
     protected bool _AnimalStateOnlyWhenChanged;
-    
-    [UFToggleGroup("TargetProp")]
-    [UnityEngine.HideInInspector()]
-    public bool _BindTargetProp = true;
-    
-    [UFGroup("TargetProp")]
-    [UnityEngine.SerializeField()]
-    [UnityEngine.HideInInspector()]
-    [UnityEngine.Serialization.FormerlySerializedAsAttribute("_TargetProponlyWhenChanged")]
-    protected bool _TargetPropOnlyWhenChanged;
     
     public override string DefaultIdentifier {
         get {
@@ -438,6 +422,12 @@ public class AnimalViewBase : uFrame.MVVM.ViewBase {
         }
     }
     
+    public virtual InGameRootViewHelper InGameRootViewHelper {
+        get {
+            return _InGameRootViewHelper ?? (_InGameRootViewHelper = this.gameObject.EnsureComponent<InGameRootViewHelper>());
+        }
+    }
+    
     protected override void InitializeViewModel(uFrame.MVVM.ViewModel model) {
         base.InitializeViewModel(model);
         // NOTE: this method is only invoked if the 'Initialize ViewModel' is checked in the inspector.
@@ -448,7 +438,6 @@ public class AnimalViewBase : uFrame.MVVM.ViewBase {
         animalview.SameCount = this._SameCount;
         animalview.Loc = this._Loc;
         animalview.needDestroy = this._needDestroy;
-        animalview.needDrop = this._needDrop;
         animalview.TargetProp = this._TargetProp;
     }
     
@@ -457,18 +446,9 @@ public class AnimalViewBase : uFrame.MVVM.ViewBase {
         // Use this.Animal to access the viewmodel.
         // Use this method to subscribe to the view-model.
         // Any designer bindings are created in the base implementation.
-        if (_BindSameCount) {
-            this.BindProperty(this.Animal.SameCountProperty, this.SameCountChanged, _SameCountOnlyWhenChanged);
-        }
         if (_BindAnimalState) {
             this.BindStateProperty(this.Animal.AnimalStateProperty, this.AnimalStateChanged, _AnimalStateOnlyWhenChanged);
         }
-        if (_BindTargetProp) {
-            this.BindProperty(this.Animal.TargetPropProperty, this.TargetPropChanged, _TargetPropOnlyWhenChanged);
-        }
-    }
-    
-    public virtual void SameCountChanged(Int32 arg1) {
     }
     
     public virtual void AnimalStateChanged(Invert.StateMachine.State arg1) {
@@ -492,9 +472,6 @@ public class AnimalViewBase : uFrame.MVVM.ViewBase {
     public virtual void OnDropping() {
     }
     
-    public virtual void TargetPropChanged(AnimalProp arg1) {
-    }
-    
     public virtual void ExecuteTapped() {
         Animal.Tapped.OnNext(new TappedCommand() { Sender = Animal });
     }
@@ -503,8 +480,20 @@ public class AnimalViewBase : uFrame.MVVM.ViewBase {
         Animal.DestroySelf.OnNext(new DestroySelfCommand() { Sender = Animal });
     }
     
+    public virtual void ExecuteStartDrop() {
+        Animal.StartDrop.OnNext(new StartDropCommand() { Sender = Animal });
+    }
+    
     public virtual void ExecuteGotDropTarget() {
         Animal.GotDropTarget.OnNext(new GotDropTargetCommand() { Sender = Animal });
+    }
+    
+    public virtual void ExecuteGotIdle() {
+        Animal.GotIdle.OnNext(new GotIdleCommand() { Sender = Animal });
+    }
+    
+    public virtual void ExecuteDebugCommand() {
+        Animal.DebugCommand.OnNext(new DebugCommandCommand() { Sender = Animal });
     }
     
     public virtual void ExecuteTapped(TappedCommand command) {
@@ -517,8 +506,23 @@ public class AnimalViewBase : uFrame.MVVM.ViewBase {
         Animal.DestroySelf.OnNext(command);
     }
     
+    public virtual void ExecuteStartDrop(StartDropCommand command) {
+        command.Sender = Animal;
+        Animal.StartDrop.OnNext(command);
+    }
+    
     public virtual void ExecuteGotDropTarget(GotDropTargetCommand command) {
         command.Sender = Animal;
         Animal.GotDropTarget.OnNext(command);
+    }
+    
+    public virtual void ExecuteGotIdle(GotIdleCommand command) {
+        command.Sender = Animal;
+        Animal.GotIdle.OnNext(command);
+    }
+    
+    public virtual void ExecuteDebugCommand(DebugCommandCommand command) {
+        command.Sender = Animal;
+        Animal.DebugCommand.OnNext(command);
     }
 }

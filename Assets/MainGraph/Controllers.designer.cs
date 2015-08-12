@@ -74,7 +74,10 @@ public class AnimalControllerBase : uFrame.MVVM.Controller {
         // This is called when a AnimalViewModel is created
         viewModel.Tapped.Action = this.TappedHandler;
         viewModel.DestroySelf.Action = this.DestroySelfHandler;
+        viewModel.StartDrop.Action = this.StartDropHandler;
         viewModel.GotDropTarget.Action = this.GotDropTargetHandler;
+        viewModel.GotIdle.Action = this.GotIdleHandler;
+        viewModel.DebugCommand.Action = this.DebugCommandHandler;
         AnimalViewModelManager.Add(viewModel);
     }
     
@@ -89,7 +92,16 @@ public class AnimalControllerBase : uFrame.MVVM.Controller {
     public virtual void DestroySelf(AnimalViewModel viewModel) {
     }
     
+    public virtual void StartDrop(AnimalViewModel viewModel) {
+    }
+    
     public virtual void GotDropTarget(AnimalViewModel viewModel) {
+    }
+    
+    public virtual void GotIdle(AnimalViewModel viewModel) {
+    }
+    
+    public virtual void DebugCommand(AnimalViewModel viewModel) {
     }
     
     public virtual void TappedHandler(TappedCommand command) {
@@ -100,8 +112,20 @@ public class AnimalControllerBase : uFrame.MVVM.Controller {
         this.DestroySelf(command.Sender as AnimalViewModel);
     }
     
+    public virtual void StartDropHandler(StartDropCommand command) {
+        this.StartDrop(command.Sender as AnimalViewModel);
+    }
+    
     public virtual void GotDropTargetHandler(GotDropTargetCommand command) {
         this.GotDropTarget(command.Sender as AnimalViewModel);
+    }
+    
+    public virtual void GotIdleHandler(GotIdleCommand command) {
+        this.GotIdle(command.Sender as AnimalViewModel);
+    }
+    
+    public virtual void DebugCommandHandler(DebugCommandCommand command) {
+        this.DebugCommand(command.Sender as AnimalViewModel);
     }
 }
 

@@ -50,27 +50,6 @@ public class AnimalView : AnimalViewBase
 		this.ExecuteTapped ();
 	}
 
-	public override void SameCountChanged (Int32 arg1)
-	{
-		gameObject.transform.FindChild ("Text").GetComponent<TextMesh> ().text = arg1.ToString ();
-	}
-
-//    public override void AnimalStateChanged(Invert.StateMachine.State arg1) {
-//		Debug.Log ("AnimalStateChanged");
-//		if (arg1 is Destroying) {
-//			this.ExecuteDestroySelf();
-//		}
-//    }
-
-//	public override void OnDestroying ()
-//	{
-//		base.OnDestroying ();
-//		this.ExecuteDestroySelf ();
-//	}
-
-//    public override void AnimalStateChanged(Invert.StateMachine.State State) {
-//    }
-
 	public override void AnimalStateChanged (Invert.StateMachine.State arg1)
 	{
 		base.AnimalStateChanged (arg1);
@@ -87,10 +66,37 @@ public class AnimalView : AnimalViewBase
 	{
 		this.ExecuteDestroySelf ();
 	}
+	
+	public override void OnDropping ()
+	{
+		base.OnDropping ();
 
-    public override void TargetPropChanged(AnimalProp arg1) {
-		if (arg1 != null) {
+		Hashtable para = new Hashtable ();
+		para.Add ("name", "drop");
+		para.Add ("position", InGameRootViewHelper.Loc2Pos (Animal.TargetProp.Loc));
+		para.Add ("time", 0.4f);
+		para.Add ("easetype", iTween.EaseType.easeInOutBack);
+		para.Add ("oncomplete", "OnDropCompleted");
+		para.Add ("oncompletetarget", this.gameObject);
+		iTween.MoveTo (this.gameObject, para);
 
-		}
-    }
+	}
+	
+	public void OnDropCompleted ()
+	{
+		iTween.StopByName (this.gameObject, "drop");
+
+		Animal.Loc = Animal.TargetProp.Loc;
+		Animal.AnimalType = Animal.TargetProp.AnimalType;
+
+		Animal.TargetProp = null;
+
+		this.ExecuteGotDropTarget ();
+		
+//		Debug.Log (Locator.Loc2Name (this.gameObject.GetComponent<AnimalView> ().Animal.Loc));
+	}
+
+	public override void OnIdle() {
+		this.ExecuteGotIdle ();
+	}
 }

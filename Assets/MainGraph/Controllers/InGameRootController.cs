@@ -133,15 +133,19 @@ public class InGameRootController : InGameRootControllerBase
 	{
 		base.CalcAnimalsCount (viewModel);
 
-		int nullCounn = viewModel.MapInfo.TotalAnimalCount - viewModel.AnimalCollections.Count;
+		int nullCount = viewModel.MapInfo.TotalAnimalCount - viewModel.AnimalCollections.Count;
 
-		viewModel.NullAnimalsCount = nullCounn;
+		viewModel.NullAnimalsCount = nullCount;
 
 		int idleCount = viewModel.AnimalCollections
 			.Where (animal => animal.AnimalState is Idle && animal.needDestroy == false)
 				.Count ();
 		
 		viewModel.IdleAnimalsCount = idleCount;
+
+		if (idleCount == viewModel.MapInfo.TotalAnimalCount) {
+			viewModel.IsDropping = false;
+		}
 	}
 
 	public override void CreateAndDrop (InGameRootViewModel viewModel)
@@ -149,36 +153,59 @@ public class InGameRootController : InGameRootControllerBase
 		base.CreateAndDrop (viewModel);
 		Debug.Log ("todo: CreateAndDrop");
 
+		viewModel.IsDropping = true;
+
 		Dictionary<int, int> existColInfo = GetExistCountByCol (viewModel);
 		for (int x = viewModel.MapInfo.xmin; x <= viewModel.MapInfo.xmax; x++) {
-			int existCount;
-			if (existColInfo.TryGetValue (x, out existCount)) {
-				int needAddCount = viewModel.MapInfo.ymax - existCount;
-				int nully = 0;
-				for (int y = viewModel.MapInfo.ymin; y <= viewModel.MapInfo.ymax; y++) {
 
-					AnimalViewModel animal = GetAnimalAtLoc (viewModel, new Loc (x, y));
+			int existCount = 0;
+			if (existColInfo.ContainsKey(x)){
+				existCount = existColInfo[x];
+			}
 
-					if (animal == null) {
-						nully = y;
-						break;
-					} else {
-						if (nully != 0) { // haven't got null space, yet.
-							animal.TargetProp = new AnimalProp () {
-								AnimalType = animal.AnimalType,
-								Loc = new Loc(x, nully)
-							};
-
-							nully++;
-						}
+			int needAddCount = viewModel.MapInfo.ymax - existCount;
+			int remainNeedAddCount = needAddCount;
+			int addTargety = viewModel.MapInfo.ymax + 1;
+			
+			while (remainNeedAddCount > 0) {
+				viewModel.CreateAnimal.OnNext (new CreateAnimalCommand () {
+					Argument = new AnimalProp () {
+						AnimalType = Locator.RandomGetAnimalType(),
+						Loc = new Loc(x, addTargety)
 					}
+				});
 
-				}
+				remainNeedAddCount--;
+				addTargety++;
 			}
 			
-			Debug.Log ("existCount: " + existCount);
+			int nully = 0;
+			for (int y = viewModel.MapInfo.ymin; y <= viewModel.MapInfo.ymax + needAddCount; y++) {
+				
+				AnimalViewModel animal = GetAnimalAtLoc (viewModel, new Loc (x, y));
+				
+				if (animal == null) {
+					if (nully == 0) {
+						nully = y;
+					}
+					continue;
+				} else {
+					if (nully != 0) { // haven't got null space, yet.
+						animal.TargetProp = new AnimalProp () {
+							AnimalType = animal.AnimalType,
+							Loc = new Loc(x, nully)
+						};
+						
+						nully++;
+					}
+				}
+			}
+
+//			Debug.Log ("existCount: " + existCount);
 
 		}
+		
+		viewModel.CalcAnimalsCount.OnNext (new CalcAnimalsCountCommand ());
 	}
 
 	/**

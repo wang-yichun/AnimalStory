@@ -49,4 +49,18 @@ public class AnimalController : AnimalControllerBase
     public override void GotDropTarget(AnimalViewModel viewModel) {
         base.GotDropTarget(viewModel);
     }
+
+    public override void StartDrop(AnimalViewModel viewModel) {
+        base.StartDrop(viewModel);
+    }
+
+    public override void DebugCommand(AnimalViewModel viewModel) {
+        base.DebugCommand(viewModel);
+		Debug.Log (String.Format ("({0},{1})", viewModel.Loc.x, viewModel.Loc.y));
+    }
+
+    public override void GotIdle(AnimalViewModel viewModel) {
+        base.GotIdle(viewModel);
+		InGameRoot.CalcAnimalsCount.OnNext (new CalcAnimalsCountCommand ());
+    }
 }

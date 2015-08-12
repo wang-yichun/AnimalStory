@@ -21,11 +21,6 @@ public partial class AnimalViewModel : AnimalViewModelBase {
 
 	public override bool ComputeShouldDrop ()
 	{
-		return needDrop;
-	}
-
-	public override bool ComputeShouldNotDrop ()
-	{
-		return !needDrop;
+		return TargetProp != null;
 	}
 }

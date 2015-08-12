@@ -14,9 +14,7 @@ using UnityEngine.UI;
 public class InGameRootView : InGameRootViewBase
 {
 	public GameObject[] AnimalsPrefab;
-
 	public GameObject IdleAnimalsCountText;
-
 
 	protected override void InitializeViewModel (uFrame.MVVM.ViewModel model)
 	{
@@ -80,6 +78,7 @@ public class InGameRootView : InGameRootViewBase
 
 		ViewBase animalV = InstantiateView (prefabSelected, viewModel);
 		animalV.gameObject.transform.position = InGameRootViewHelper.Loc2Pos (animalVM.Loc);
+		animalV.gameObject.transform.FindChild ("Sprite").gameObject.GetComponent<SpriteRenderer> ().color = new Color (1, 1, 1, 0);
 
 		return animalV;
 	}
@@ -90,13 +89,15 @@ public class InGameRootView : InGameRootViewBase
 		Destroy (view.gameObject);
 	}
 
-    public override void IdleAnimalsCountChanged(Int32 arg1) {
-		IdleAnimalsCountText.GetComponent<Text>().text = "IdleAnimalsCountText: " + arg1;
-    }
+	public override void IdleAnimalsCountChanged (Int32 arg1)
+	{
+		IdleAnimalsCountText.GetComponent<Text> ().text = "IdleAnimalsCountText: " + arg1;
+	}
 
-    public override void ShouldCreateAndDropChanged(Boolean arg1) {
+	public override void ShouldCreateAndDropChanged (Boolean arg1)
+	{
 		if (arg1) {
-			this.ExecuteCreateAndDrop();
+			this.ExecuteCreateAndDrop ();
 		}
-    }
+	}
 }

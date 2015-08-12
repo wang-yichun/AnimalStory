@@ -29,6 +29,11 @@ public partial class InGameRootViewModel : InGameRootViewModelBase {
 	{
 		if (MapInfo == null) 
 			return false;
+
+		if (IsDropping) {
+			return false;
+		}
+
 		return NullAnimalsCount > 0 && IdleAnimalsCount + NullAnimalsCount == MapInfo.TotalAnimalCount;
 	}
 }
